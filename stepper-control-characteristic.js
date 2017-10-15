@@ -23,4 +23,4 @@ StepperControlCharacteristic.prototype.onRequest = function(offset, cb) {
   console.log('On read request received');
 };
 
-module.exports = MotorControlCharacteristic;
+module.exports = StepperControlCharacteristic;
