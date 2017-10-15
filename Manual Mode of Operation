@@ -1,0 +1,19 @@
+Manual Mode of Operation
+
+## Android App
+- Init device connection
+- isDeviceConnected
+    - If connection fails
+        - Deactivate controls
+- Power On Motors
+
+
+
+## Arduino App
+
+- Device power state: ON/OFF
+- Power on device via power btn
+    - Powers BT_module
+- On power on motors command received
+    -   gradually increase motor speed to desired value
+- On serve type command received, gradually increase/ decrease speed

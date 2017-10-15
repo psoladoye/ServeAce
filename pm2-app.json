@@ -1,0 +1,24 @@
+{
+  "apps" : [{
+    "name"        : "remote-service",
+    "script"      : "main.js",
+    "args"        : [],
+    "watch"       : true,
+    "node_args"   : "",
+    "merge_logs"  : false,
+    "cwd"         : "",
+    "exec_mode"   : "fork",
+    "exec_interpreter" : "node",
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "env_production" : {
+       "NODE_ENV": "production"
+    },
+    "env_staging" : {
+       "NODE_ENV" : "staging",
+       "TEST"     : true
+    }
+    // "max_memory_restart": "1M"
+  }]
+}
