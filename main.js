@@ -3,7 +3,7 @@ var fork = require('child_process').fork;
 var bleno = require('bleno');
 
 
-bleno.on('stateChange', function(state) => {
+bleno.on('stateChange', function(state) {
   if(state  === 'poweredOn') {
     bleno.startAdvertising('ServeAce');
   } else {
@@ -15,7 +15,9 @@ bleno.on('advertisingStart', function(error) {
   console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
   if(!error) {
-    
+		bleno.setService([], function(error) {
+			console.log('setServices: ' + (error ? 'error ' + error : 'success'));
+		});    
   }
 });
 

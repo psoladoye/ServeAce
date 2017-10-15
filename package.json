@@ -1,0 +1,23 @@
+{
+  "name": "serve-ace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psoladoye/ServeAce.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/psoladoye/ServeAce/issues"
+  },
+  "homepage": "https://github.com/psoladoye/ServeAce#readme",
+  "dependencies": {
+    "bleno": "^0.4.2",
+    "onoff": "^1.1.7"
+  }
+}

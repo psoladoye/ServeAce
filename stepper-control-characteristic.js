@@ -10,7 +10,7 @@ var StepperControlCharacteristic = function() {
         properties: ['read'],
         descriptors: [
           new Descriptor({
-            uuid: '2902',
+            uuid: '2901',
             value: 'Stepper position'
           })
         ]
