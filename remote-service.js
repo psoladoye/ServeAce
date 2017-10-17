@@ -8,7 +8,7 @@ var CommandCenterCharacteristic = require('./command-center-characteristic');
 
 function RemoteService() {
   RemoteService.super_.call(this, {
-    uuid: '180F',
+    uuid: 'd270',
     characteristics: [
       new MotorControlCharacteristic(),
       new StepperControlCharacteristic(),
