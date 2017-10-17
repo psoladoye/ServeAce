@@ -1,0 +1,8 @@
+{
+  "MAX_BALLS": 30,
+  "MOTOR_SPEEDS": {
+    "FLAT_S": 64,
+    "TOPSPIN_S": 127,
+    "H_TOPSPIN_S": 191
+  }
+}

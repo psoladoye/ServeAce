@@ -1,0 +1,22 @@
+{
+  "POWER": {
+    "tag": "0x00",
+    "value": "0x1"
+  },
+
+  "FEED_BALL": {
+
+  },
+
+  "CHANGE_SETT": {
+
+  },
+
+  "RESET": {
+    "tag": "0x04"
+  },
+
+  "SERVE_PROF": {
+    "tag": "0x05"
+  }
+}

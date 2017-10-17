@@ -1,15 +1,23 @@
-var path = require('path');
-var fork = require('child_process').fork;
-var BLECommandCenter = require('bleno');
-process.env['BLENO_DEVICE_NAME'] = 'ServeAce_V1';
+const path = require('path');
+const fs = require('fs');
+const fork = require('child_process').fork;
 
-var RemoteService = require('./remote-service');
-var primaryService = new RemoteService();
+const BLECommandCenter = require('bleno');
+const RemoteService = require('./gatt_services/remote-service');
+process.env['BLENO_DEVICE_NAME'] = 'ServeAce_V1';
+const remoteService = new RemoteService();
+
+const def_config = fs.readFileSync('./config/def-conf.json');
+
+const ServeAce_dev = {
+  isOn: false,
+  isFeedingBall: false
+};
 
 BLECommandCenter.on('stateChange', function(state) {
   switch (state) {
     case 'poweredOn':{
-      BLECommandCenter.startAdvertising('ServeAce',[primaryService.uuid]);
+      BLECommandCenter.startAdvertising('ServeAce',[remoteService.uuid]);
       break;
     }
     case 'unauthorized': {
@@ -30,7 +38,7 @@ BLECommandCenter.on('advertisingStart', function(error) {
   console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
   if(!error) {
-		BLECommandCenter.setServices([primaryService], function(error) {
+		BLECommandCenter.setServices([remoteService], function(error) {
 			console.log('setServices: ' + (error ? 'error ' + error : 'success'));
 		});
   }
