@@ -2,9 +2,9 @@ var util = require('util');
 var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;
 
-var MotorControlCharacteristic = require('./motor-control-characteristic');
-var StepperControlCharacteristic = require('./stepper-control-characteristic');
-var CommandCenterCharacteristic = require('./command-center-characteristic');
+var MotorControlCharacteristic = require('./gatt_characteristics/motor-control-characteristic');
+var StepperControlCharacteristic = require('./gatt_characteristics/stepper-control-characteristic');
+var CommandCenterCharacteristic = require('./gatt_characteristics/command-center-characteristic');
 
 var mCtrlChar = new MotorControlCharacteristic();
 var sCtrlChar = new StepperControlCharacteristic();
