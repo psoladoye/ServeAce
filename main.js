@@ -1,7 +1,7 @@
 var path = require('path');
 var fork = require('child_process').fork;
-var BLECommandCenter = require('bleno');
-process.env['BLENO_DEVICE_NAME'] = 'ServeAce';
+var BLECommandCenter = require('BLECommandCenter');
+process.env['BLENO_DEVICE_NAME'] = 'ServeAce';vi
 
 var RemoteService = require('./remote-service');
 var primaryService = new RemoteService();
@@ -23,7 +23,6 @@ BLECommandCenter.on('stateChange', function(state) {
     default: {
       BLECommandCenter.stopAdvertising();
     }
-
   }
 });
 
