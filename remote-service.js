@@ -7,7 +7,7 @@ var StepperControlCharacteristic = require('./stepper-control-characteristic');
 
 function RemoteService() {
   RemoteService.super_.call(this, {
-    uuid: '180F',
+    uuid: 'd270',
     characteristics: [
       new MotorControlCharacteristic(),
       new StepperControlCharacteristic()
