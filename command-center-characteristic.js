@@ -26,8 +26,8 @@ CommandCenterCharacteristic.prototype.onReadRequest = function(offset, cb) {
 
 CommandCenterCharacteristic.prototype.onWriteRequest = function(data, offset,
   withoutResponse, cb) {
-  console.log('Command received: ',data);
-  cb(this.RESULT_SUCCESS, data);
+  cb(this.RESULT_SUCCESS);
+	this.emit('dataReceived',data);
 };
 
 module.exports = CommandCenterCharacteristic;

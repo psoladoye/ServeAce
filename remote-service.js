@@ -1,17 +1,37 @@
 var util = require('util');
 var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;
+var fork = require('child_process').fork;
 
 var MotorControlCharacteristic = require('./motor-control-characteristic');
 var StepperControlCharacteristic = require('./stepper-control-characteristic');
 var CommandCenterCharacteristic = require('./command-center-characteristic');
+var BallCountCharacteristic = require('./ball-count-characteristic');
 
 var mCtrlChar = new MotorControlCharacteristic();
 var sCtrlChar = new StepperControlCharacteristic();
 var cCenterChar = new CommandCenterCharacteristic();
+var bCountChar = new BallCountCharacteristic();
 
-sCtrlChar.on('onReadRequest', function(state) {
-  console.log('state event watch test');
+var mCtrl_process = fork('./sub_processes/motor_ctrl.js');
+var sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
+
+cCenterChar.on('dataReceived', function(data) {
+	console.log(`data received: ${data}`);
+	
+	switch(parseInt(data)) {
+		case 1: {
+			mCtrl_process.send('Change to slice serve');
+			break;				
+		}
+
+		case 2: {
+			sCtrl_process.send('set delay to 10 s');
+			break;
+		}
+
+		default: console.log('Unknown data');	
+	}
 });
 
 function RemoteService() {
@@ -20,7 +40,8 @@ function RemoteService() {
     characteristics: [
       mCtrlChar,
       sCtrlChar,
-      cCenterChar
+      cCenterChar,
+			bCountChar
     ]
   });
 }
