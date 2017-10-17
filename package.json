@@ -18,6 +18,6 @@
   "homepage": "https://github.com/psoladoye/ServeAce#readme",
   "dependencies": {
     "bleno": "^0.4.2",
-    "onoff": "^1.1.7"
+    "onoff": "^1.1.8"
   }
 }

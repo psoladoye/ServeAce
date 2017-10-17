@@ -4,7 +4,7 @@
     "script"      : "main.js",
     "args"        : [],
     "watch"       : true,
-    "node_args"   : "",
+    "node_args"   : ["--harmony"],
     "merge_logs"  : false,
     "cwd"         : "",
     "exec_mode"   : "fork",

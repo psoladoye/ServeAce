@@ -1,6 +1,6 @@
 var path = require('path');
 var fork = require('child_process').fork;
-var BLECommandCenter = require('BLECommandCenter');
+var BLECommandCenter = require('bleno');
 process.env['BLENO_DEVICE_NAME'] = 'ServeAce';
 
 var RemoteService = require('./remote-service');

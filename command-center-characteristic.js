@@ -30,5 +30,4 @@ CommandCenterCharacteristic.prototype.onWriteRequest = function(data, offset,
   cb(this.RESULT_SUCCESS);
 };
 
-//module.exports = CommandCenterCharacteristic;
-export { CommandCenterCharacteristic };
+module.exports = CommandCenterCharacteristic;
