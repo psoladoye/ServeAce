@@ -2,14 +2,14 @@ const path = require('path');
 const fs = require('fs');
 const fork = require('child_process').fork;
 
-var BLECommandCenter = require('bleno');
-var RemoteService = require('./gatt_services/remote-service');
+const BLECommandCenter = require('bleno');
+const RemoteService = require('./gatt_services/remote-service');
 process.env['BLENO_DEVICE_NAME'] = 'ServeAce';
-var remoteService = new RemoteService();
+const remoteService = new RemoteService();
 
-var def_config = fs.readFileSync('./config/def-conf.json');
+const def_config = fs.readFileSync('./config/def-conf.json');
 
-var ServeAce_dev = {
+const ServeAce_dev = {
   isOn: false,
   isFeedingBall: false
 };
