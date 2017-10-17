@@ -19,7 +19,7 @@ var MotorControlCharacteristic = function() {
 
 util.inherits(MotorControlCharacteristic, Characteristic);
 
-MotorControlCharacteristic.prototype.onRequest = function(offset, cb) {
+MotorControlCharacteristic.prototype.onReadRequest = function(offset, cb) {
   console.log('On read request received');
 };
 

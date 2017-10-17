@@ -1,25 +1,46 @@
 var path = require('path');
 var fork = require('child_process').fork;
-var bleno = require('bleno');
+var BLECommandCenter = require('BLECommandCenter');
+process.env['BLENO_DEVICE_NAME'] = 'ServeAce';
 
 var RemoteService = require('./remote-service');
 var primaryService = new RemoteService();
 
-bleno.on('stateChange', function(state) {
-  if(state  === 'poweredOn') {
-    bleno.startAdvertising('ServeAce',[primaryService.uuid]);
-  } else {
-    bleno.stopAdvertising();
+BLECommandCenter.on('stateChange', function(state) {
+  switch (state) {
+    case 'poweredOn':{
+      BLECommandCenter.startAdvertising('ServeAce',[primaryService.uuid]);
+      break;
+    }
+    case 'unauthorized': {
+      console.log('Current user not authorized');
+      break;
+    }
+    case 'unsupported': {
+      console.log('Device does not support BLE');
+      break;
+    }
+    default: {
+      BLECommandCenter.stopAdvertising();
+    }
+
   }
 });
 
-bleno.on('advertisingStart', function(error) {
+BLECommandCenter.on('advertisingStart', function(error) {
   console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
   if(!error) {
-		bleno.setServices([primaryService], function(error) {
+		BLECommandCenter.setServices([primaryService], function(error) {
 			console.log('setServices: ' + (error ? 'error ' + error : 'success'));
-		});    
+		});
   }
 });
 
+BLECommandCenter.on('accept', (clientAddress) => {
+  console.log(`Connected client address: ${clientAddress}`);
+});
+
+BLECommandCenter.on('disconnect', (clientAddress) => {
+  console.log(`Client disconnected: ${clientAddress}`);
+});

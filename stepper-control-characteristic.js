@@ -19,7 +19,7 @@ var StepperControlCharacteristic = function() {
 
 util.inherits(StepperControlCharacteristic, Characteristic);
 
-StepperControlCharacteristic.prototype.onRequest = function(offset, cb) {
+StepperControlCharacteristic.prototype.onReadRequest = function(offset, cb) {
   console.log('On read request received');
 };
 
