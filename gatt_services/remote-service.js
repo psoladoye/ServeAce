@@ -17,7 +17,7 @@ var bCountChar = new BallCountCharacteristic();
 var mCtrl_process = fork('./sub_processes/motor_ctrl.js');
 var sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
 
-cCenterChar.on('dataReceived', function(data) {
+/*cCenterChar.on('dataReceived', function(data) {
   console.log(`data received: ${data}`);
   
   switch(parseInt(data)) {
@@ -33,10 +33,10 @@ cCenterChar.on('dataReceived', function(data) {
 
     default: console.log('Unknown data'); 
   }
-});
+});*/
 
 server.on('dataReceived', function(data) {
-	console.log(`data received: ${data}`);
+	console.log('data received:',data);
 	
 	/*switch(parseInt(data)) {
 		case 1: {
