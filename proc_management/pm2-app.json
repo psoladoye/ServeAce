@@ -6,7 +6,7 @@
     "watch"       : true,
     "node_args"   : [],
     "merge_logs"  : false,
-    "cwd"         : "",
+    "cwd"         : "${HOME}/Documents/ServeAcei/",
     "exec_mode"   : "fork",
     "exec_interpreter" : "node",
     "env": {

@@ -3,10 +3,10 @@ var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;
 var fork = require('child_process').fork;
 
-var BallCountCharacteristic = require('./ball-count-characteristic');
-var MotorControlCharacteristic = require('./gatt_characteristics/motor-control-characteristic');
-var StepperControlCharacteristic = require('./gatt_characteristics/stepper-control-characteristic');
-var CommandCenterCharacteristic = require('./gatt_characteristics/command-center-characteristic');
+var BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
+var MotorControlCharacteristic = require('../gatt_characteristics/motor-control-characteristic');
+var StepperControlCharacteristic = require('../gatt_characteristics/stepper-control-characteristic');
+var CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
 
 var mCtrlChar = new MotorControlCharacteristic();
 var sCtrlChar = new StepperControlCharacteristic();
