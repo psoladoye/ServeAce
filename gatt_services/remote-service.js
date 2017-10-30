@@ -17,6 +17,23 @@ var bCountChar = new BallCountCharacteristic();
 var mCtrl_process = fork('./sub_processes/motor_ctrl.js');
 var sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
 
+const DEV_STATES = {
+  ON:1,
+  OFF:0
+};
+
+const ServeAce_dev = {
+  power: DEV_STATES.OFF,
+  isFeedingBall: false/*,
+  led: new Gpio(24, 'out')*/
+};
+
+const COMM_TAGS = {
+  DEV_POWER: 1,
+  DEV_PLAY_PAUSE:2,
+  SETT_SERVE_PROF:3,
+}
+
 /*cCenterChar.on('dataReceived', function(data) {
   console.log(`data received: ${data}`);
   
@@ -36,21 +53,32 @@ var sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
 });*/
 
 server.on('dataReceived', function(data) {
-	console.log('data received:',data);
-	
-	/*switch(parseInt(data)) {
-		case 1: {
-			mCtrl_process.send('Change to slice serve');
-			break;				
-		}
-
-		case 2: {
-			sCtrl_process.send('set delay to 10 s');
+  console.log('data received:',data);
+  switch(data.tag) {
+    case COMM_TAGS.DEV_POWER: {
+			// power device
+			//ServeAce_dev.power = parseInt(data.value);
+			mCtrl_process.send({
+				tag:"POWER", 
+				val: data.value,
+				serveAce: ServeAce_dev
+			});
+			break;
+    }
+    
+    case COMM_TAGS.DEV_PLAY_PAUSE: {
+			sCtrl_process.send({
+				tag:"STATE", 
+				val: data.value,
+				serveAce: ServeAce_dev
+			});
 			break;
 		}
-
-		default: console.log('Unknown data');	
-	}*/
+		
+		default: {
+			console.log("Unknown data tag");
+		}
+  }
 });
 
 function RemoteService() {

@@ -9,11 +9,6 @@ const remoteService = new RemoteService();
 
 const def_config = fs.readFileSync('./config/def-conf.json');
 
-const ServeAce_dev = {
-  isOn: false,
-  isFeedingBall: false
-};
-
 BLECommandCenter.on('stateChange', function(state) {
   switch (state) {
     case 'poweredOn':{
@@ -38,9 +33,9 @@ BLECommandCenter.on('advertisingStart', function(error) {
   console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
   if(!error) {
-		BLECommandCenter.setServices([remoteService], function(error) {
-			console.log('setServices: ' + (error ? 'error ' + error : 'success'));
-		});
+    BLECommandCenter.setServices([remoteService], function(error) {
+      console.log('setServices: ' + (error ? 'error ' + error : 'success'));
+    });
   }
 });
 
