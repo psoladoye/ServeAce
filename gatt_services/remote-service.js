@@ -2,7 +2,6 @@ var util = require('util');
 var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;
 var fork = require('child_process').fork;
-const server = require('../server/server.js')();
 
 var BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
 var MotorControlCharacteristic = require('../gatt_characteristics/motor-control-characteristic');
@@ -16,26 +15,16 @@ var bCountChar = new BallCountCharacteristic();
 
 var mCtrl_process = fork('./sub_processes/motor_ctrl.js');
 var sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
-
-const DEV_STATES = {
-  ON:1,
-  OFF:0
-};
+const COMM_TAGS = require('../common/constants').COMM_TAGS;
+const DEV_STATES = require('../common/constants').DEV_STATES;
 
 const ServeAce_dev = {
   power: DEV_STATES.OFF,
-  isFeedingBall: false/*,
-  led: new Gpio(24, 'out')*/
+  isFeedingBall: false
 };
 
-const COMM_TAGS = {
-  DEV_POWER: 1,
-  DEV_PLAY_PAUSE:2,
-  SETT_SERVE_PROF:3,
-}
-
-/*cCenterChar.on('dataReceived', function(data) {
-  console.log(`data received: ${data}`);
+cCenterChar.on('dataReceived', function(data) {
+  console.log('data received: ',data);
   
   switch(parseInt(data)) {
     case 1: {
@@ -49,35 +38,6 @@ const COMM_TAGS = {
     }
 
     default: console.log('Unknown data'); 
-  }
-});*/
-
-server.on('dataReceived', function(data) {
-  console.log('data received:',data);
-  switch(data.tag) {
-    case COMM_TAGS.DEV_POWER: {
-			// power device
-			//ServeAce_dev.power = parseInt(data.value);
-			mCtrl_process.send({
-				tag:"POWER", 
-				val: data.value,
-				serveAce: ServeAce_dev
-			});
-			break;
-    }
-    
-    case COMM_TAGS.DEV_PLAY_PAUSE: {
-			sCtrl_process.send({
-				tag:"STATE", 
-				val: data.value,
-				serveAce: ServeAce_dev
-			});
-			break;
-		}
-		
-		default: {
-			console.log("Unknown data tag");
-		}
   }
 });
 
