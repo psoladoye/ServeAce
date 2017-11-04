@@ -28,13 +28,13 @@ Motor.prototype.init = function () {
 Motor.prototype.power = function (state) {
   switch (state) {
     case POWER.ON: {
-      speedUp(SPEEDS.FLAT_S,1);
-      speedUp(SPEEDS.FLAT_S,2);
+      speedUp.call(this,SPEEDS.FLAT_S,1);
+      speedUp.call(this,SPEEDS.FLAT_S,2);
       break;
     }
     case POWER.OFF: {
-      speedUp(0,1);
-      speedUp(0,2);
+      speedUp.call(this,0,1);
+      speedUp.call(this,0,2);
       break;
     }
     default:console.log('Unknow device state');
@@ -44,18 +44,18 @@ Motor.prototype.power = function (state) {
 Motor.prototype.setServe = function (serve) {
   switch (serve) {
     case SERVE_TYPE.FLAT_S: {
-      speedUp(SPEEDS.FLAT_S,1);
-      speedUp(SPEEDS.FLAT_S,2);
+      speedUp.call(this,SPEEDS.FLAT_S,1);
+      speedUp.call(this,SPEEDS.FLAT_S,2);
       break;
     }
     case SERVE_TYPE.TOPSPIN_S: {
-      speedUp(SPEEDS.TOPSPIN_S,1);
-      speedUp(SPEEDS.TOPSPIN_S,2);
+      speedUp.call(this,SPEEDS.TOPSPIN_S,1);
+      speedUp.call(this,SPEEDS.TOPSPIN_S,2);
       break;
     }
     case SERVE_TYPE.H_TOPSPIN_S: {
-      speedUp(SPEEDS.H_TOPSPIN_S,1);
-      speedUp(SPEEDS.H_TOPSPIN_S,2);
+      speedUp.call(this,SPEEDS.H_TOPSPIN_S,1);
+      speedUp.call(this,SPEEDS.H_TOPSPIN_S,2);
       break;
     }
     default: console.log('unknown serve type');
