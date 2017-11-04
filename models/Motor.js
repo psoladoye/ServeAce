@@ -67,13 +67,14 @@ let speedUp = function(speed, m) {
   console.log(`[Motor::speedUp]: Speeding up motor${m} to speed: ${speed}`);
   console.log('[Motor::speedUp]: current speed: ',this["speed"+m]);
   for (var i = this["speed"+m]; i < speed; i++) {
-    ()(i);
+    ((index) => {
       setTimeout(() => {
-      console.log('[Motor::speedUp]: motor'+m,this["pwm"+m]);
-      console.log(`[Motor::speedUp]: motor${m}: ${i}`); 
-      this.arduino.analogWrite(this["pwm"+m],i);
-      this["speed"+m] = i;
-    }, 300);
+        console.log('[Motor::speedUp]: motor'+m,this["pwm"+m]);
+        console.log(`[Motor::speedUp]: motor${m}: ${i}`);
+        this.arduino.analogWrite(this["pwm"+m],i);
+        this["speed"+m] = i;
+      }, 300);
+    })(i);
   }
 };
 
