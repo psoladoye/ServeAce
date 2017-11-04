@@ -23,16 +23,6 @@ const serve_type = {
   H_TOPSPIN_S: 3
 };
 
-const pins = {
-  PLAY_PAUSE: uno.pins.A2,
-  MOTOR_1_PWM: 6,
-  MOTOR_1_DIR: 7,
-  MOTOR_2_PWM: 5,
-  MOTOR_2_DIR: 11,
-  STEPPER_MOTOR_DIR: uno.pins.A0,
-  STEPPER_MOTOR_STEP: uno.pins.A1
-};
-
 const uno = {
   pins: {
     A0: 14,
@@ -42,6 +32,16 @@ const uno = {
     A4: 18,
     A5: 19
   }
+};
+
+const pins = {
+  PLAY_PAUSE: uno.pins.A2,
+  MOTOR_1_PWM: 6,
+  MOTOR_1_DIR: 7,
+  MOTOR_2_PWM: 5,
+  MOTOR_2_DIR: 11,
+  STEPPER_MOTOR_DIR: uno.pins.A0,
+  STEPPER_MOTOR_STEP: uno.pins.A1
 };
 
 module.exports = {
