@@ -26,8 +26,7 @@ board.on('error', (err) => {
 });
 
 board.on('reportversion', () => {
-  console.log(`[motor-control]: Firmware version: ${board.version.major}
-    .${board.version.minor}`);
+  console.log(`[motor-control]: Firmware version: ${board.version.major}.${board.version.minor}`);
 });
 
 

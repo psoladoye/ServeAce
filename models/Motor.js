@@ -14,6 +14,7 @@ function Motor(options, board) {
 };
 
 Motor.prototype.init = function () {
+  console.log('[Motor]: Initializing motors...');
   // Motor 1
   this.arduino.pinMode(this.dir1, this.arduino.MODES.OUTPUT);
   this.arduino.pinMode(this.pwm1, this.arduino.MODES.OUTPUT);
@@ -63,14 +64,21 @@ Motor.prototype.setServe = function (serve) {
 };
 
 let speedUp = function(speed, m) {
+  console.log(`[Motor::speedUp]: Speeding up motor${m} to speed: ${speed}`);
+  console.log('[Motor::speedUp]: current speed: ',this["speed"+m]);
   for (var i = this["speed"+m]; i < speed; i++) {
-    setTimeout(() => {
+    ()(i);
+      setTimeout(() => {
+      console.log('[Motor::speedUp]: motor'+m,this["pwm"+m]);
+      console.log(`[Motor::speedUp]: motor${m}: ${i}`); 
       this.arduino.analogWrite(this["pwm"+m],i);
-    }, 100);
+      this["speed"+m] = i;
+    }, 300);
   }
 };
 
 let slowDown = function(speed, m) {
+  console.log(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
   for (var i = this["speed"+m]; i > speed; i--) {
     setTimeout(() => {
       this.arduino.analogWrite(this["pwm"+m],i);
