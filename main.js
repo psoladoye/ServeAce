@@ -6,6 +6,9 @@ const fork = require('child_process').fork;
 const os = require('os');
 const WIN32 = 'win32';
 
+let mCtrl_process = null;
+let sCtrl_process = null;
+
 process.env['BLENO_DEVICE_NAME'] = 'ServeAce_V1';
 
 const def_config = fs.readFileSync('./config/def-conf.json');
@@ -54,8 +57,8 @@ if (process.env.BLE  && os.platform() !== WIN32) {
   });
 } else {
   const server = require('./server/server.js')();
-  let mCtrl_process = fork('./sub_processes/motor_ctrl.js');
-  let sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
+  mCtrl_process = fork('./sub_processes/motor_ctrl.js');
+  sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
   const COMM_TAGS = require('./common/constants').COMM_TAGS;
 
   server.on('dataReceived', function(data) {
@@ -63,23 +66,40 @@ if (process.env.BLE  && os.platform() !== WIN32) {
     switch(data.tag) {
       case COMM_TAGS.DEV_POWER: {
         mCtrl_process.send({
-          tag:"POWER", 
+          tag:"POWER",
           val: data.value
         });
         break;
       }
-      
+
       case COMM_TAGS.DEV_PLAY_PAUSE: {
         sCtrl_process.send({
-          tag:"STATE", 
+          tag:"STATE",
           val: data.value
         });
         break;
       }
-      
+
       default: {
         console.log("Unknown data tag");
       }
     }
   });
 }
+
+function cleanUp() {
+  if(mCtrl_process !== null) {
+    mCtrl_process.send({
+      tag:"POWER",
+      val: 0
+    });
+  }
+}
+
+process.on('exit', () => {
+  cleanUp();
+});
+
+process.on('SIGINT', () => {
+  cleanUp();
+});

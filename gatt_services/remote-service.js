@@ -4,12 +4,8 @@ var PrimaryService = bleno.PrimaryService;
 var fork = require('child_process').fork;
 
 var BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
-var MotorControlCharacteristic = require('../gatt_characteristics/motor-control-characteristic');
-var StepperControlCharacteristic = require('../gatt_characteristics/stepper-control-characteristic');
 var CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
 
-var mCtrlChar = new MotorControlCharacteristic();
-var sCtrlChar = new StepperControlCharacteristic();
 var cCenterChar = new CommandCenterCharacteristic();
 var bCountChar = new BallCountCharacteristic();
 
@@ -25,11 +21,11 @@ const ServeAce_dev = {
 
 cCenterChar.on('dataReceived', function(data) {
   console.log('data received: ',data);
-  
+
   switch(parseInt(data)) {
     case 1: {
       mCtrl_process.send('Change to slice serve');
-      break;        
+      break;
     }
 
     case 2: {
@@ -37,7 +33,7 @@ cCenterChar.on('dataReceived', function(data) {
       break;
     }
 
-    default: console.log('Unknown data'); 
+    default: console.log('Unknown data');
   }
 });
 
@@ -45,8 +41,6 @@ function RemoteService() {
   RemoteService.super_.call(this, {
     uuid: 'd270',
     characteristics: [
-      mCtrlChar,
-      sCtrlChar,
       cCenterChar,
 			bCountChar
     ]

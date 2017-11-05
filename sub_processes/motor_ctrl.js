@@ -7,7 +7,7 @@ const CONST = require('../common/constants');
 let motor = null;
 let board_port = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';
 let board = new Board(new SerialPort(board_port, {baudRate: 57600}),
-  {reportVersionTimeout: 1500}, (err) => {
+  {reportVersionTimeout: 3000}, (err) => {
   if (err) {
     console.log('[motor-control]: Error on board connection: ', err.message);
   } else {
@@ -30,13 +30,25 @@ board.on('reportversion', () => {
   console.log(`[motor-control]: Firmware version: ${board.version.major}.${board.version.minor}`);
 });
 
+process.on('exit', () => {
+
+});
+
+process.on('SIGINT', () => {
+
+});
+
 
 process.on('message', (msg) => {
   console.log('[motor-control]: ', msg);
   switch(msg.tag) {
     case 'POWER': {
       console.log(`[motor-control]: Motor power state ${msg.val}`);
-      motor.power(msg.val);
+      if(motor !== null) {
+        motor.power(msg.val);
+      } else {
+        console.log('[motor-control]: Null motor ref');
+      }
       break;
     }
     default: console.log('[motor-control]: Unknown option.');
