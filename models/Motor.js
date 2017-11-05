@@ -2,6 +2,7 @@ const CONST = require('../common/constants');
 const SPEEDS = CONST.MOTOR_SPEEDS;
 const SERVE_TYPE = CONST.SERVE_TYPE;
 const POWER = CONST.DEV_STATES;
+const TimeUtils = require('../utils/time');
 
 function Motor(options, board) {
   this.pwm1 = options.pwm1;
@@ -17,25 +18,31 @@ Motor.prototype.init = function () {
   console.log('[Motor]: Initializing motors...');
   // Motor 1
   this.arduino.pinMode(this.dir1, this.arduino.MODES.OUTPUT);
-  this.arduino.pinMode(this.pwm1, this.arduino.MODES.OUTPUT);
-  this.arduino.digitalWrite(this.dir1, this.arduino.LOW);
+  this.arduino.pinMode(this.pwm1, this.arduino.MODES.PWM);
+  this.arduino.digitalWrite(this.dir1, this.arduino.HIGH); // change dir to low
 
   // Motor 2
   this.arduino.pinMode(this.dir2, this.arduino.MODES.OUTPUT);
-  this.arduino.pinMode(this.pwm2, this.arduino.MODES.OUTPUT);
-  this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
+  this.arduino.pinMode(this.pwm2, this.arduino.MODES.PWM);
+  this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 };
 
 Motor.prototype.power = function (state) {
   switch (state) {
     case POWER.ON: {
+      this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
+      this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
       speedUp.call(this,SPEEDS.FLAT_S,1);
       speedUp.call(this,SPEEDS.FLAT_S,2);
+
       break;
     }
     case POWER.OFF: {
-      speedUp.call(this,0,1);
-      speedUp.call(this,0,2);
+      this.arduino.digitalWrite(this.dir1, this.arduino.LOW);
+      this.arduino.digitalWrite(this.dir2, this.arduino.LOW);
+      slowDown.call(this,0,1);
+      slowDown.call(this,0,2);
+
       break;
     }
     default:console.log('Unknow device state');
@@ -66,24 +73,22 @@ Motor.prototype.setServe = function (serve) {
 let speedUp = function(speed, m) {
   console.log(`[Motor::speedUp]: Speeding up motor${m} to speed: ${speed}`);
   console.log('[Motor::speedUp]: current speed: ',this["speed"+m]);
-  for (var i = this["speed"+m]; i < speed; i++) {
-    ((index) => {
-      setTimeout(() => {
-        console.log('[Motor::speedUp]: motor'+m,this["pwm"+m]);
-        console.log(`[Motor::speedUp]: motor${m}: ${i}`);
-        this.arduino.analogWrite(this["pwm"+m],i);
-        this["speed"+m] = i;
-      }, 300);
-    })(i);
+
+  for (var i = this["speed"+m]; i <= speed; i++) {
+    this.arduino.analogWrite(this["pwm"+m],i);
+    this["speed"+m] = i;
+    TimeUtils.sleep(1000/60);
   }
 };
 
 let slowDown = function(speed, m) {
   console.log(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
-  for (var i = this["speed"+m]; i > speed; i--) {
-    setTimeout(() => {
-      this.arduino.analogWrite(this["pwm"+m],i);
-    }, 100);
+  console.log('[Motor::slowDown]: current speed: ',this["speed"+m]);
+
+  for (var i = this["speed"+m]; i >= speed; i--) {
+    this.arduino.analogWrite(this["pwm"+m],i);
+    this["speed"+m] = i;
+    TimeUtils.sleep(1000/60);
   }
 };
 

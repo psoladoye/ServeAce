@@ -1,10 +1,11 @@
 const SerialPort = require('serialport');
+const os = require('os');
 const Board = require('firmata');
 const Motor = require('../models/Motor');
 const CONST = require('../common/constants');
 
 let motor = null;
-let board_port = '/dev/ttyACM0';
+let board_port = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';
 let board = new Board(new SerialPort(board_port, {baudRate: 57600}),
   {reportVersionTimeout: 1500}, (err) => {
   if (err) {
