@@ -30,15 +30,6 @@ board.on('reportversion', () => {
   console.log(`[motor-control]: Firmware version: ${board.version.major}.${board.version.minor}`);
 });
 
-process.on('exit', () => {
-
-});
-
-process.on('SIGINT', () => {
-
-});
-
-
 process.on('message', (msg) => {
   console.log('[motor-control]: ', msg);
   switch(msg.tag) {
@@ -53,4 +44,18 @@ process.on('message', (msg) => {
     }
     default: console.log('[motor-control]: Unknown option.');
   }
+});
+
+function cleanUp() {
+
+} 
+
+process.on('exit', () => {
+  console.log('Killing process by .exit');
+  cleanUp();
+});
+
+process.on('SIGINT', () => {
+  console.log('Killing process by SIGINT');
+  cleanUp();
 });

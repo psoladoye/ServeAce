@@ -22,6 +22,7 @@ if (process.env.BLE  && os.platform() !== WIN32) {
     switch (state) {
       case 'poweredOn':{
         BLECommandCenter.startAdvertising('ServeAce',[remoteService.uuid]);
+        remoteService.initSubprocesses();
         break;
       }
       case 'unauthorized': {
@@ -88,12 +89,7 @@ if (process.env.BLE  && os.platform() !== WIN32) {
 }
 
 function cleanUp() {
-  if(mCtrl_process !== null) {
-    mCtrl_process.send({
-      tag:"POWER",
-      val: 0
-    });
-  }
+  console.log('cleaning up');
 }
 
 process.on('exit', () => {
