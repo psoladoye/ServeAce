@@ -1,3 +1,5 @@
+'use strict';
+
 var util = require('util');
 var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;

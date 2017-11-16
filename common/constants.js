@@ -1,4 +1,4 @@
-
+'use strict';
 
 const comm_tags = {
   DEV_POWER: 1,

@@ -4,7 +4,10 @@ const path = require('path');
 const fs = require('fs');
 const fork = require('child_process').fork;
 const os = require('os');
+
+const PLATFORM = os.platform();
 const WIN32 = 'win32';
+const BLE = process.env.BLE || null;
 
 let mCtrl_process = null;
 let sCtrl_process = null;
@@ -13,12 +16,12 @@ process.env['BLENO_DEVICE_NAME'] = 'ServeAce_V1';
 
 const def_config = fs.readFileSync('./config/def-conf.json');
 
-if (process.env.BLE  && os.platform() !== WIN32) {
+if (BLE  && (PLATFORM !== WIN32)) {
   const BLECommandCenter = require('bleno');
   const RemoteService = require('./gatt_services/remote-service');
   const remoteService = new RemoteService();
 
-  BLECommandCenter.on('stateChange', function(state) {
+  BLECommandCenter.on('stateChange', (state) => {
     switch (state) {
       case 'poweredOn':{
         BLECommandCenter.startAdvertising('ServeAce',[remoteService.uuid]);
@@ -39,7 +42,7 @@ if (process.env.BLE  && os.platform() !== WIN32) {
     }
   });
 
-  BLECommandCenter.on('advertisingStart', function(error) {
+  BLECommandCenter.on('advertisingStart', (error) => {
     console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
     if(!error) {
@@ -56,7 +59,9 @@ if (process.env.BLE  && os.platform() !== WIN32) {
   BLECommandCenter.on('disconnect', (clientAddress) => {
     console.log(`Client disconnected: ${clientAddress}`);
   });
+
 } else {
+  // TODO: Use ad-hoc wifi
   const server = require('./server/server.js')();
   mCtrl_process = fork('./sub_processes/motor_ctrl.js');
   sCtrl_process = fork('./sub_processes/stepper_ctrl.js');

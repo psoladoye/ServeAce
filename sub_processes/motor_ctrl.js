@@ -1,3 +1,5 @@
+'use strict';
+
 const SerialPort = require('serialport');
 const os = require('os');
 const Board = require('firmata');
@@ -35,12 +37,16 @@ process.on('message', (msg) => {
   switch(msg.tag) {
     case 'POWER': {
       console.log(`[motor-control]: Motor power state ${msg.val}`);
-      if(motor !== null) {
+      if(motor) {
         motor.power(msg.val);
       } else {
         console.log('[motor-control]: Null motor ref');
       }
       break;
+    }
+
+    case 'SET_SERVEACE': {
+      if(motor) motor.setServeAce(msg);
     }
     default: console.log('[motor-control]: Unknown option.');
   }
@@ -48,7 +54,7 @@ process.on('message', (msg) => {
 
 function cleanUp() {
 
-} 
+}
 
 process.on('exit', () => {
   console.log('Killing process by .exit');

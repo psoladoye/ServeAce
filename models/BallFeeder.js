@@ -1,12 +1,15 @@
+'use strict';
+
 const TimeUtil = require('../utils/time');
 const Gpio = require('onoff').Gpio;
 
-function BallFeeder() {
+function BallFeeder () {
   this.pin = 25;
   this.delay = 2000;
+  this.intervalId = null;
 }
 
-BallFeeder.prototype.init = function() {
+BallFeeder.prototype.init = function () {
   this.led = new Gpio(this.pin, 'out');
   this.button = new Gpio(4, 'in', 'falling');
   this.button.watch((err, val) => {
@@ -15,14 +18,19 @@ BallFeeder.prototype.init = function() {
   });
 };
 
-BallFeeder.prototype.start = function() {
+BallFeeder.prototype.start = function () {
   rotateDeg.call(this);
 }
 
-BallFeeder.prototype.shutDown = function() {
+BallFeeder.prototype.shutDown = function () {
+  this.stop();
   this.led.unexport();
   this.button.unexport();
 };
+
+BallFeeder.prototype.stop = function () {
+  if(this.intervalId) clearInterval(this.intervalId);
+}
 
 function rotateDeg(deg, speed) {
   // set direction
@@ -30,7 +38,7 @@ function rotateDeg(deg, speed) {
   let delay = (1/speed) * 70 * 1E-3;
   var led_val = false;
 
-  setInterval(() => {
+  this.intervalId = setInterval(() => {
     led_val = !led_val;
     this.led.writeSync(led_val);
   }, 1000);
@@ -43,3 +51,5 @@ function rotateDeg(deg, speed) {
     // TimeUtil.sleep(delay);
   }*/
 }
+
+module.exports = BallFeeder;
