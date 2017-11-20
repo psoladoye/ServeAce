@@ -32,7 +32,7 @@ Motor.prototype.init = function () {
 
 Motor.prototype.setServeAce (serveAce) {
   this.serveAce = serveAce;
-}
+};
 
 Motor.prototype.power = function (state) {
   switch (state) {

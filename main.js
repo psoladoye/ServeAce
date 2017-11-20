@@ -73,7 +73,7 @@ if (BLE  && (PLATFORM !== WIN32)) {
       case COMM_TAGS.DEV_POWER: {
         mCtrl_process.send({
           tag:"POWER",
-          val: data.value
+          val: data.val
         });
         break;
       }
@@ -81,7 +81,7 @@ if (BLE  && (PLATFORM !== WIN32)) {
       case COMM_TAGS.DEV_PLAY_PAUSE: {
         sCtrl_process.send({
           tag:"STATE",
-          val: data.value
+          val: data.val
         });
         break;
       }

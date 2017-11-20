@@ -26,13 +26,19 @@ cCenterChar.on('dataReceived', function(data) {
 
   let parsedData = JSON.parse(data);
   switch(parseInt(parsedData.tag)) {
-    case 1: {
-      if(mCtrl_process) mCtrl_process.send('Change to slice serve');
+    case COMM_TAGS.DEV_POWER: {
+      mCtrl_process.send({
+        tag:"POWER",
+        val: data.val
+      });
       break;
     }
 
-    case 2: {
-      if(sCtrl_process) sCtrl_process.send('set delay to 10 s');
+    case COMM_TAGS.DEV_PLAY_PAUSE: {
+      sCtrl_process.send({
+        tag:"STATE",
+        val: data.val
+      });
       break;
     }
 
