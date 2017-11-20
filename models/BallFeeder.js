@@ -14,6 +14,7 @@ BallFeeder.prototype.init = function () {
   this.button = new Gpio(4, 'in', 'falling');
   this.button.watch((err, val) => {
     if (err) { throw err; }
+    console.log(`Button val: ${val}`);
     this.led.writeSync(val);
   });
 };

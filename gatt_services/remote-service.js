@@ -24,7 +24,8 @@ const ServeAce_dev = {
 cCenterChar.on('dataReceived', function(data) {
   console.log('data received: ',data);
 
-  switch(parseInt(data)) {
+  let parsedData = JSON.parse(data);
+  switch(parseInt(parsedData.tag)) {
     case 1: {
       if(mCtrl_process) mCtrl_process.send('Change to slice serve');
       break;
