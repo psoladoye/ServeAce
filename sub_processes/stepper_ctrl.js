@@ -25,4 +25,5 @@ process.on('message', function(msg) {
 process.on('SIGINT', () => {
   console.log('[stepper-control]: Shutting down stepper');
   ballFeeder.shutDown();
+  process.exit();
 });

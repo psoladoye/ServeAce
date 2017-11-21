@@ -56,12 +56,8 @@ function cleanUp() {
 
 }
 
-process.on('exit', () => {
-  console.log('Killing process by .exit');
-  cleanUp();
-});
-
 process.on('SIGINT', () => {
   console.log('Killing process by SIGINT');
   cleanUp();
+  process.exit();
 });

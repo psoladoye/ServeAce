@@ -92,10 +92,7 @@ function cleanUp() {
   console.log('cleaning up');
 }
 
-process.on('exit', () => {
-  cleanUp();
-});
-
 process.on('SIGINT', () => {
   cleanUp();
+  process.exit();
 });

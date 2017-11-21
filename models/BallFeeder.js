@@ -13,11 +13,12 @@ BallFeeder.prototype.init = function () {
   console.log('[ball-feeder]: Initializing ball feeder...');
   this.led = new Gpio(this.pin, 'out');
   this.button = new Gpio(4, 'in', 'falling');
+  this.button.setActiveLow(true);
 
   this.button.watch((err, val) => {
     if (err) { throw err; }
     console.log(`Button val: ${val}`);
-    this.led.writeSync(val);
+    this.led.writeSync(!val);
   });
 };
 
