@@ -8,7 +8,12 @@ process.on('message', function(msg) {
   console.log('[stepper-control]: message from remote-service => ', msg);
   switch(msg.tag) {
     case 'POWER' : {
-      ballFeeder.init();
+      if(msg.val) {
+        ballFeeder.init();
+      } else {
+        console.log('[stepper-control]: Shutting down ball feeder');
+        ballFeeder.shutDown();
+      }
       break;
     }
 

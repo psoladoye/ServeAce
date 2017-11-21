@@ -30,7 +30,7 @@ Motor.prototype.init = function () {
   this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 };
 
-Motor.prototype.setServeAce (serveAce) {
+Motor.prototype.setServeAce = function (serveAce) {
   this.serveAce = serveAce;
 };
 

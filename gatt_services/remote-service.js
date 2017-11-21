@@ -22,27 +22,24 @@ const ServeAce_dev = {
 };
 
 cCenterChar.on('dataReceived', function(data) {
-  console.log('data received: ',data);
+  console.log('[remote-service]: data received: ',data);
 
   let parsedData = JSON.parse(data);
+  console.log('Parsed Data: ',parsedData);
+
   switch(parseInt(parsedData.tag)) {
     case COMM_TAGS.DEV_POWER: {
-      mCtrl_process.send({
-        tag:"POWER",
-        val: data.val
-      });
+      mCtrl_process.send({ tag:'POWER', val: parsedData.val });
+      sCtrl_process.send({ tag:'POWER', val: parsedData.val });
       break;
     }
 
     case COMM_TAGS.DEV_PLAY_PAUSE: {
-      sCtrl_process.send({
-        tag:"STATE",
-        val: data.val
-      });
+      sCtrl_process.send({ tag:'STATE', val: parsedData.val });
       break;
     }
 
-    default: console.log('Unknown data');
+    default: console.log('[remote-service]: Unknown data');
   }
 });
 

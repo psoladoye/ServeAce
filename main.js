@@ -71,18 +71,13 @@ if (BLE  && (PLATFORM !== WIN32)) {
     console.log('data received:',data);
     switch(data.tag) {
       case COMM_TAGS.DEV_POWER: {
-        mCtrl_process.send({
-          tag:"POWER",
-          val: data.val
-        });
+        mCtrl_process.send({ tag:'POWER', val: data.val });
+        sCtrl_process.send({ ag:'STATE', val: data.val });
         break;
       }
 
       case COMM_TAGS.DEV_PLAY_PAUSE: {
-        sCtrl_process.send({
-          tag:"STATE",
-          val: data.val
-        });
+        sCtrl_process.send({ ag:'STATE', val: data.val });
         break;
       }
 

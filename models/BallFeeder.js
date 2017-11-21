@@ -10,8 +10,10 @@ function BallFeeder () {
 }
 
 BallFeeder.prototype.init = function () {
+  console.log('[ball-feeder]: Initializing ball feeder...');
   this.led = new Gpio(this.pin, 'out');
   this.button = new Gpio(4, 'in', 'falling');
+
   this.button.watch((err, val) => {
     if (err) { throw err; }
     console.log(`Button val: ${val}`);
@@ -25,8 +27,8 @@ BallFeeder.prototype.start = function () {
 
 BallFeeder.prototype.shutDown = function () {
   this.stop();
-  this.led.unexport();
-  this.button.unexport();
+  if(this.led) this.led.unexport();
+  if(this.button) this.button.unexport();
 };
 
 BallFeeder.prototype.stop = function () {
