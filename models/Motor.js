@@ -5,6 +5,7 @@ const SPEEDS = CONST.MOTOR_SPEEDS;
 const SERVE_TYPE = CONST.SERVE_TYPE;
 const POWER = CONST.DEV_STATES;
 const TimeUtils = require('../utils/time');
+const log = require('util').debuglog('MOTOR_MODEL');
 
 function Motor(options, board) {
   this.pwm1 = options.pwm1;
@@ -18,7 +19,7 @@ function Motor(options, board) {
 };
 
 Motor.prototype.init = function () {
-  console.log('[Motor]: Initializing motors...');
+  log('Initializing motors...');
   // Motor 1
   this.arduino.pinMode(this.dir1, this.arduino.MODES.OUTPUT);
   this.arduino.pinMode(this.pwm1, this.arduino.MODES.PWM);
@@ -52,7 +53,7 @@ Motor.prototype.power = function (state) {
 
       break;
     }
-    default:console.log('Unknow device state');
+    default:log('Unknow device state');
   }
 };
 
@@ -73,15 +74,15 @@ Motor.prototype.setServe = function (serve) {
       changeSpeed.call(this,SPEEDS.H_TOPSPIN_S,2);
       break;
     }
-    default: console.log('unknown serve type');
+    default: log('unknown serve type');
   }
 };
 
 let changeSpeed = function (speed, m) {
   if(this["speed"+m] === speed) return;
   if(this["speed"+m] < speed) {
-    console.log(`[Motor::speedUp]: Speeding up motor${m} to speed: ${speed}`);
-    console.log('[Motor::speedUp]: current speed: ',this["speed"+m]);
+    log(`[Motor::speedUp]: Speeding up motor${m} to speed: ${speed}`);
+    log('[Motor::speedUp]: current speed: ',this["speed"+m]);
 
     for (var i = this["speed"+m]; i <= speed; i++) {
       this.arduino.analogWrite(this["pwm"+m],i);
@@ -89,8 +90,8 @@ let changeSpeed = function (speed, m) {
       TimeUtils.sleep(1000/60);
     }
   } else {
-    console.log(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
-    console.log('[Motor::slowDown]: current speed: ',this["speed"+m]);
+    log(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
+    log('[Motor::slowDown]: current speed: ',this["speed"+m]);
 
     for (var i = this["speed"+m]; i >= speed; i--) {
       this.arduino.analogWrite(this["pwm"+m],i);

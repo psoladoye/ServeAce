@@ -4,7 +4,7 @@ var util = require('util');
 var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;
 var fork = require('child_process').fork;
-const log = util.debuglog('DEBUG');
+const log = util.debuglog('REMOTE_SERVICE');
 
 var BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
 var CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
@@ -42,6 +42,10 @@ cCenterChar.on('dataReceived', function(data) {
 
     default: log('[remote-service]: Unknown data');
   }
+});
+
+process.on('message', (msg) => {
+  log(msg);
 });
 
 function RemoteService() {

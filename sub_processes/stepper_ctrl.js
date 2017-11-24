@@ -1,10 +1,11 @@
 'use strict';
-const log = require(util).debuglog('DEBUG');
+const log = require('util').debuglog('STEPPER');
 const Stepper = require('../models/BallFeeder');
 
 let ballFeeder = new Stepper();
 
 ballFeeder.on('button_pressed', () => {
+  log('Button pressed registered');
   process.send({ tag:'BALL_FEEDER', val: 22});
 });
 
@@ -23,7 +24,6 @@ process.on('message', function(msg) {
 
     default: log('[stepper-control]: Unknown tag');
   }
-	
 });
 
 process.on('SIGINT', () => {

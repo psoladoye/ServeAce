@@ -5,7 +5,7 @@ const os = require('os');
 const Board = require('firmata');
 const Motor = require('../models/Motor');
 const CONST = require('../common/constants');
-const log = require('util').debuglog('DEBUG');
+const log = require('util').debuglog('MOTOR');
 
 let motor = null;
 let board_port = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';

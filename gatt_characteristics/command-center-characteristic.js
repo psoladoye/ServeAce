@@ -23,9 +23,8 @@ util.inherits(CommandCenterCharacteristic, Characteristic);
 
 CommandCenterCharacteristic.prototype.onWriteRequest = function(data, offset,
   withoutResponse, cb) {
-  console.log('On write request received');
   cb(this.RESULT_SUCCESS);
-	this.emit('dataReceived',data);
+  this.emit('dataReceived',data);
 };
 
 module.exports = CommandCenterCharacteristic;
