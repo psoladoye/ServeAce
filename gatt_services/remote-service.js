@@ -4,6 +4,7 @@ var util = require('util');
 var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;
 var fork = require('child_process').fork;
+const log = util.debuglog('DEBUG');
 
 var BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
 var CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
@@ -22,10 +23,10 @@ const ServeAce_dev = {
 };
 
 cCenterChar.on('dataReceived', function(data) {
-  console.log('[remote-service]: data received: ',data);
+  log('[remote-service]: data received: ',data);
 
   let parsedData = JSON.parse(data);
-  console.log('Parsed Data: ',parsedData);
+  log('Parsed Data: ',parsedData);
 
   switch(parseInt(parsedData.tag)) {
     case COMM_TAGS.DEV_POWER: {
@@ -39,7 +40,7 @@ cCenterChar.on('dataReceived', function(data) {
       break;
     }
 
-    default: console.log('[remote-service]: Unknown data');
+    default: log('[remote-service]: Unknown data');
   }
 });
 
@@ -53,9 +54,13 @@ function RemoteService() {
   });
 }
 
-RemoteService.prototype.initSubprocesses = function() {
+RemoteService.prototype.initSubprocesses = function () {
   mCtrl_process = fork('./sub_processes/motor_ctrl.js');
   sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
+};
+
+RemoteService.prototype.ballFeederUpdate = function (value) {
+  bCountChar.onBallCountChange(value);
 };
 
 util.inherits(RemoteService, PrimaryService);

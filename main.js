@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const fork = require('child_process').fork;
 const os = require('os');
+const log = require('util').debuglog('DEBUG');
 
 const PLATFORM = os.platform();
 const WIN32 = 'win32';
@@ -12,14 +13,19 @@ const BLE = process.env.BLE || null;
 let mCtrl_process = null;
 let sCtrl_process = null;
 
+let BLECommandCenter = null;
+let RemoteService = null;
+let remoteService = null;
+
 process.env['BLENO_DEVICE_NAME'] = 'ServeAce_V1';
 
 const def_config = fs.readFileSync('./config/def-conf.json');
 
 if (BLE  && (PLATFORM !== WIN32)) {
-  const BLECommandCenter = require('bleno');
-  const RemoteService = require('./gatt_services/remote-service');
-  const remoteService = new RemoteService();
+  BLECommandCenter = require('bleno');
+  RemoteService = require('./gatt_services/remote-service');
+  remoteService = new RemoteService();
+
 
   BLECommandCenter.on('stateChange', (state) => {
     switch (state) {
@@ -29,11 +35,11 @@ if (BLE  && (PLATFORM !== WIN32)) {
         break;
       }
       case 'unauthorized': {
-        console.log('Current user not authorized');
+        log('Current user not authorized');
         break;
       }
       case 'unsupported': {
-        console.log('Device does not support BLE');
+        log('Device does not support BLE');
         break;
       }
       default: {
@@ -43,21 +49,21 @@ if (BLE  && (PLATFORM !== WIN32)) {
   });
 
   BLECommandCenter.on('advertisingStart', (error) => {
-    console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
+    log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
     if(!error) {
       BLECommandCenter.setServices([remoteService], function(error) {
-        console.log('setServices: ' + (error ? 'error ' + error : 'success'));
+        log('setServices: ' + (error ? 'error ' + error : 'success'));
       });
     }
   });
 
   BLECommandCenter.on('accept', (clientAddress) => {
-    console.log(`Connected client address: ${clientAddress}`);
+    log(`Connected client address: ${clientAddress}`);
   });
 
   BLECommandCenter.on('disconnect', (clientAddress) => {
-    console.log(`Client disconnected: ${clientAddress}`);
+    log(`Client disconnected: ${clientAddress}`);
   });
 
 } else {
@@ -68,7 +74,7 @@ if (BLE  && (PLATFORM !== WIN32)) {
   const COMM_TAGS = require('./common/constants').COMM_TAGS;
 
   server.on('dataReceived', function(data) {
-    console.log('data received:',data);
+    log('data received:',data);
     switch(data.tag) {
       case COMM_TAGS.DEV_POWER: {
         mCtrl_process.send({ tag:'POWER', val: data.val });
@@ -82,14 +88,29 @@ if (BLE  && (PLATFORM !== WIN32)) {
       }
 
       default: {
-        console.log("Unknown data tag");
+        log("Unknown data tag");
       }
     }
   });
 }
 
+
+process.on('message', (msg) => {
+  switch(msg.tag) {
+
+    case 'BALL_FEEDER': {
+      log('[main]: Update ball feeder update');
+      if(remoteService) remoteService.ballFeederUpdate(msg.val);
+      break;
+    }
+
+    default: log('[main]: Unknown tag');
+
+  }
+});
+
 function cleanUp() {
-  console.log('cleaning up');
+  log('cleaning up');
 }
 
 process.on('SIGINT', () => {

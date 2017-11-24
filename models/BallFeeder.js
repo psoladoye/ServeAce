@@ -1,7 +1,10 @@
 'use strict';
 
+const util = require('util');
+const EventEmitter = require('events');
 const TimeUtil = require('../utils/time');
 const Gpio = require('onoff').Gpio;
+const log = util.debuglog('debug');
 
 function BallFeeder () {
   this.pin = 25;
@@ -10,15 +13,16 @@ function BallFeeder () {
 }
 
 BallFeeder.prototype.init = function () {
-  console.log('[ball-feeder]: Initializing ball feeder...');
+  log('[ball-feeder]: Initializing ball feeder...');
   this.led = new Gpio(this.pin, 'out');
   this.button = new Gpio(4, 'in', 'falling');
   this.button.setActiveLow(true);
 
   this.button.watch((err, val) => {
     if (err) { throw err; }
-    console.log(`Button val: ${val}`);
-    this.led.writeSync(!val);
+    log(`Button val: ${val}`);
+    this.led.writeSync(val ^ 1);
+    this.emit('button_pressed');
   });
 };
 
@@ -55,5 +59,7 @@ function rotateDeg(deg, speed) {
     // TimeUtil.sleep(delay);
   }*/
 }
+
+util.inherits(BallFeeder, EventEmitter);
 
 module.exports = BallFeeder;
