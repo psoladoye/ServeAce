@@ -25,7 +25,10 @@ if (BLE  && (PLATFORM !== WIN32)) {
   BLECommandCenter = require('bleno');
   RemoteService = require('./gatt_services/remote-service');
   remoteService = new RemoteService();
-
+  
+  process.on('message', (msg) => {
+    log('Hello Paul');
+  });
 
   BLECommandCenter.on('stateChange', (state) => {
     switch (state) {

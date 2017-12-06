@@ -6,7 +6,8 @@ let ballFeeder = new Stepper();
 
 ballFeeder.on('button_pressed', () => {
   log('Button pressed registered');
-  process.send({ tag:'BALL_FEEDER', val: 22});
+  //process.send({ tag:'BALL_FEEDER', val: 22});
+  process.send('Hello Parenet');
 });
 
 process.on('message', function(msg) {
@@ -15,6 +16,7 @@ process.on('message', function(msg) {
     case 'POWER' : {
       if(msg.val) {
         ballFeeder.init();
+        process.send('Sending on power');
       } else {
         log('[stepper-control]: Shutting down ball feeder');
         ballFeeder.shutDown();

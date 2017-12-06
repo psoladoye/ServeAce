@@ -46,6 +46,7 @@ cCenterChar.on('dataReceived', function(data) {
 
 process.on('message', (msg) => {
   log(msg);
+  log('Test received msg');
 });
 
 function RemoteService() {
@@ -61,6 +62,9 @@ function RemoteService() {
 RemoteService.prototype.initSubprocesses = function () {
   mCtrl_process = fork('./sub_processes/motor_ctrl.js');
   sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
+  process.on('message', (msg) => {
+    log('Within Init message received', msg);
+  });
 };
 
 RemoteService.prototype.ballFeederUpdate = function (value) {
