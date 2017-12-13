@@ -5,16 +5,16 @@ const os = require('os');
 const Board = require('firmata');
 const Motor = require('../models/Motor');
 const CONST = require('../common/constants');
-const log = require('util').debuglog('MOTOR');
+const log = require('../utils/logger')('MOTOR');
 
 let motor = null;
 let board_port = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';
 let board = new Board(new SerialPort(board_port, {baudRate: 57600}),
   {reportVersionTimeout: 3000}, (err) => {
   if (err) {
-    log('[motor-control]: Error on board connection: ', err.message);
+    log.error('Error on board connection: ', err.message);
   } else {
-    log('[motor-control]: Arduino ready');
+    log.info('[motor-control]: Arduino ready');
     motor = new Motor({
       pwm1: CONST.ASSIGNED_PINS.MOTOR_1_PWM,
       dir1: CONST.ASSIGNED_PINS.MOTOR_1_DIR,
@@ -26,22 +26,22 @@ let board = new Board(new SerialPort(board_port, {baudRate: 57600}),
 });
 
 board.on('error', (err) => {
-  log('[motor-control]: Error: ', err.message);
+  log.error('Error: ', err.message);
 });
 
 board.on('reportversion', () => {
-  log(`[motor-control]: Firmware version: ${board.version.major}.${board.version.minor}`);
+  log.error(`Firmware version: ${board.version.major}.${board.version.minor}`);
 });
 
 process.on('message', (msg) => {
-  log('[motor-control]: ', msg);
+  log.info('Incoming message => ', msg);
   switch(msg.tag) {
     case 'POWER': {
-      log(`[motor-control]: Motor power state ${msg.val}`);
+      log.info(`Motor power state ${msg.val}`);
       if(motor) {
         motor.power(msg.val);
       } else {
-        log('[motor-control]: Null motor ref');
+        log.error('Null motor ref');
       }
       break;
     }
@@ -49,16 +49,15 @@ process.on('message', (msg) => {
     case 'SET_SERVEACE': {
       if(motor) motor.setServeAce(msg);
     }
-    default: log('[motor-control]: Unknown option.');
+    default: log.error('Unknown option.');
   }
 });
 
 function cleanUp() {
-
+  log.info('Killing process by SIGINT');
 }
 
 process.on('SIGINT', () => {
-  log('Killing process by SIGINT');
   cleanUp();
   process.exit();
 });

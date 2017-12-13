@@ -4,7 +4,7 @@ const util = require('util');
 const EventEmitter = require('events');
 const TimeUtil = require('../utils/time');
 const Gpio = require('onoff').Gpio;
-const log = util.debuglog('BALL_FEEDER');
+const log = require('../utils/logger')('BALL_FEEDER');
 
 function BallFeeder () {
   this.pin = 25;
@@ -13,13 +13,13 @@ function BallFeeder () {
 }
 
 BallFeeder.prototype.init = function () {
-  log('[ball-feeder]: Initializing ball feeder...');
+  log.info('Initializing ball feeder...');
   this.led = new Gpio(this.pin, 'out');
   this.button = new Gpio(4, 'in', 'falling');
 
   this.button.watch((err, val) => {
     if (err) { throw err; }
-    log(`Button val: ${val}`);
+    log.info(`Button val: ${val}`);
     this.led.writeSync(val ^ 1);
     this.emit('button_pressed');
   });

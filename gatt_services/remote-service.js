@@ -4,7 +4,7 @@ var util = require('util');
 var bleno = require('bleno');
 var PrimaryService = bleno.PrimaryService;
 var fork = require('child_process').fork;
-const log = util.debuglog('REMOTE_SERVICE');
+const log = require('../utils/logger')('REMOTE_SERVICE');
 
 var BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
 var CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
@@ -17,16 +17,13 @@ var sCtrl_process = null;
 const COMM_TAGS = require('../common/constants').COMM_TAGS;
 const DEV_STATES = require('../common/constants').DEV_STATES;
 
-const ServeAce_dev = {
-  power: DEV_STATES.OFF,
-  isFeedingBall: false
-};
+process.on('message', function(msg) {
+  log.info(msg);
+});
 
 cCenterChar.on('dataReceived', function(data) {
-  log('[remote-service]: data received: ',data);
-
   let parsedData = JSON.parse(data);
-  log('Parsed Data: ',parsedData);
+  log.info('Parsed Data: ',parsedData);
 
   switch(parseInt(parsedData.tag)) {
     case COMM_TAGS.DEV_POWER: {
@@ -40,13 +37,8 @@ cCenterChar.on('dataReceived', function(data) {
       break;
     }
 
-    default: log('[remote-service]: Unknown data');
+    default: log.error('Unknown data');
   }
-});
-
-process.on('message', (msg) => {
-  log(msg);
-  log('Test received msg');
 });
 
 function RemoteService() {
@@ -54,7 +46,7 @@ function RemoteService() {
     uuid: 'd270',
     characteristics: [
       cCenterChar,
-			bCountChar
+      bCountChar
     ]
   });
 }
@@ -62,9 +54,6 @@ function RemoteService() {
 RemoteService.prototype.initSubprocesses = function () {
   mCtrl_process = fork('./sub_processes/motor_ctrl.js');
   sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
-  process.on('message', (msg) => {
-    log('Within Init message received', msg);
-  });
 };
 
 RemoteService.prototype.ballFeederUpdate = function (value) {

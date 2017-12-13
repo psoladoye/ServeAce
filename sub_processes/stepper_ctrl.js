@@ -1,35 +1,33 @@
 'use strict';
-const log = require('util').debuglog('STEPPER');
+const log = require('../utils/logger')('STEPPER');
 const Stepper = require('../models/BallFeeder');
 
-let ballFeeder = new Stepper();
+var ballFeeder = new Stepper();
 
 ballFeeder.on('button_pressed', () => {
-  log('Button pressed registered');
-  //process.send({ tag:'BALL_FEEDER', val: 22});
-  process.send('Hello Parenet');
+  log.info('Button pressed listener');
+  process.send('Hello from stepper');
 });
 
 process.on('message', function(msg) {
-  log('[stepper-control]: message from remote-service => ', msg);
+  log.info('Message from remote-service => ', msg);
   switch(msg.tag) {
     case 'POWER' : {
       if(msg.val) {
         ballFeeder.init();
-        process.send('Sending on power');
       } else {
-        log('[stepper-control]: Shutting down ball feeder');
+        log.info('Shutting down ball feeder');
         ballFeeder.shutDown();
       }
       break;
     }
 
-    default: log('[stepper-control]: Unknown tag');
+    default: log.error(': Unknown tag');
   }
 });
 
 process.on('SIGINT', () => {
-  log('[stepper-control]: Shutting down stepper');
+  log.info('SIGINT Shutting down stepper');
   ballFeeder.shutDown();
   process.exit();
 });
