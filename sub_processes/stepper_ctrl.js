@@ -6,7 +6,7 @@ var ballFeeder = new Stepper();
 
 ballFeeder.on('button_pressed', () => {
   log.info('Button pressed listener');
-  process.send('Hello from stepper');
+	process.send({tag: 'BALL_COUNT'});
 });
 
 process.on('message', function(msg) {

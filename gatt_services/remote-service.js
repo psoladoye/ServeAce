@@ -17,10 +17,6 @@ var sCtrl_process = null;
 const COMM_TAGS = require('../common/constants').COMM_TAGS;
 const DEV_STATES = require('../common/constants').DEV_STATES;
 
-process.on('message', function(msg) {
-  log.info(msg);
-});
-
 cCenterChar.on('dataReceived', function(data) {
   let parsedData = JSON.parse(data);
   log.info('Parsed Data: ',parsedData);
@@ -53,11 +49,21 @@ function RemoteService() {
 
 RemoteService.prototype.initSubprocesses = function () {
   mCtrl_process = fork('./sub_processes/motor_ctrl.js');
-  sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
-};
+	mCtrl_process.on('message', msg => {
+		log.info(msg);
+	});
 
-RemoteService.prototype.ballFeederUpdate = function (value) {
-  bCountChar.onBallCountChange(value);
+  sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
+	sCtrl_process.on('message', msg => {
+		switch(msg.tag) {
+			case 'BALL_COUNT': {
+				bCountChar.onBallCountChange(JSON.stringify({tag: 5, val: msg.val}));
+				break;
+			}
+
+			default: log.info('Uknown tag');
+		}
+	});
 };
 
 util.inherits(RemoteService, PrimaryService);

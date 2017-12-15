@@ -1,5 +1,6 @@
 'use strict';
 
+const ipc = require('node-ipc');
 const path = require('path');
 const fs = require('fs');
 const fork = require('child_process').fork;
@@ -16,16 +17,6 @@ let sCtrl_process = null;
 let BLECommandCenter = null;
 let RemoteService = null;
 let remoteService = null;
-
-if(!process.env.LOG) {
-	console.log('no log var');
- 	console.log(typeof(process.env.LOG));
-} else {
-	console.log(typeof(process.env.LOG));
-  process.env.LOG = process.env.LOG.split(",");
-	console.log(typeof(process.env.LOG));
-}
-process.env['BLENO_DEVICE_NAME'] = 'ServeAce_V1';
 
 const def_config = fs.readFileSync('./config/def-conf.json');
 
