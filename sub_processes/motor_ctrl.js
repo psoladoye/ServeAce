@@ -55,6 +55,7 @@ process.on('message', (msg) => {
 
 function cleanUp() {
   log.info('Killing process by SIGINT');
+  if(motor) motor.power(0);
 }
 
 process.on('SIGINT', () => {

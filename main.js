@@ -1,6 +1,5 @@
 'use strict';
 
-const ipc = require('node-ipc');
 const path = require('path');
 const fs = require('fs');
 const fork = require('child_process').fork;

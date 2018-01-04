@@ -1,12 +1,13 @@
 'use strict';
 
 const util = require('util');
-var bleno = require('bleno');
+const bleno = require('bleno');
+const log = require('../utils/logger')('BALL_COUNT');
 
-var Descriptor = bleno.Descriptor;
-var Characteristic = bleno.Characteristic;
+let Descriptor = bleno.Descriptor;
+let Characteristic = bleno.Characteristic;
 
-var BallCountCharacteristic = function() {
+let BallCountCharacteristic = function() {
 	BallCountCharacteristic.super_.call(this, {
 		uuid: '2E18',
 		properties: ['notify']
@@ -22,17 +23,17 @@ var BallCountCharacteristic = function() {
 util.inherits(BallCountCharacteristic, Characteristic);
 
 BallCountCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-	console.log('onSubscribe');
+	log.info('onSubscribe');
 	this.updateValueCallback = updateValueCallback;
 };
 
 BallCountCharacteristic.prototype.onUnsubscribe = function() {
-	console.log('onUnsubscribe');
+	log.info('onUnsubscribe');
 	this.updateValueCallback = null;
 };
 
 BallCountCharacteristic.prototype.onNotify = function() {
-	console.log('onNotify');
+	log.info('onNotify');
 };
 
 BallCountCharacteristic.prototype.onBallCountChange = function(ballCount) {

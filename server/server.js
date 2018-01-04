@@ -3,7 +3,7 @@
 const http = require('http');
 
 module.exports = function() {
-  var ServeAce_Server = http.createServer((req, res) => {
+  let ServeAce_Server = http.createServer((req, res) => {
     let body = [];
     req.on('data', (data) => {
       body.push(data);

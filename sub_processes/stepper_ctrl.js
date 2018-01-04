@@ -2,7 +2,7 @@
 const log = require('../utils/logger')('STEPPER');
 const Stepper = require('../models/BallFeeder');
 
-var ballFeeder = new Stepper();
+let ballFeeder = new Stepper();
 
 ballFeeder.on('button_pressed', () => {
   log.info('Button pressed listener');

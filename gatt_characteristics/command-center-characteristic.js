@@ -1,12 +1,12 @@
 'use strict';
 
-var util = require('util');
-var bleno = require('bleno');
+const util = require('util');
+const bleno = require('bleno');
 
-var Descriptor = bleno.Descriptor;
-var Characteristic = bleno.Characteristic;
+let Descriptor = bleno.Descriptor;
+let Characteristic = bleno.Characteristic;
 
-var CommandCenterCharacteristic = function() {
+let CommandCenterCharacteristic = function() {
     CommandCenterCharacteristic.super_.call(this, {
         uuid: '2D18',
         properties: ['write'],

@@ -1,21 +1,20 @@
 'use strict';
 
-var util = require('util');
-var bleno = require('bleno');
-var PrimaryService = bleno.PrimaryService;
-var fork = require('child_process').fork;
+const util = require('util');
+const bleno = require('bleno');
+const PrimaryService = bleno.PrimaryService;
+const fork = require('child_process').fork;
 const log = require('../utils/logger')('REMOTE_SERVICE');
 
-var BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
-var CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
-
-var cCenterChar = new CommandCenterCharacteristic();
-var bCountChar = new BallCountCharacteristic();
-
-var mCtrl_process = null;
-var sCtrl_process = null;
 const COMM_TAGS = require('../common/constants').COMM_TAGS;
 const DEV_STATES = require('../common/constants').DEV_STATES;
+const BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
+const CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
+
+let cCenterChar = new CommandCenterCharacteristic();
+let bCountChar = new BallCountCharacteristic();
+let mCtrl_process = null;
+let sCtrl_process = null;
 
 cCenterChar.on('dataReceived', function(data) {
   let parsedData = JSON.parse(data);
