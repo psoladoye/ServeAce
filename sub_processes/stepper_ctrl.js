@@ -1,6 +1,7 @@
 'use strict';
 const log = require('../utils/logger')('STEPPER');
 const Stepper = require('../models/BallFeeder');
+const TimeUtils = require('../utils/time');
 
 let ballFeeder = new Stepper();
 
@@ -29,5 +30,6 @@ process.on('message', function(msg) {
 process.on('SIGINT', () => {
   log.info('SIGINT Shutting down stepper');
   ballFeeder.shutDown();
+  TimeUtils.sleep(1000);
   process.exit();
 });

@@ -23,12 +23,13 @@ Motor.prototype.init = function () {
   // Motor 1
   this.arduino.pinMode(this.dir1, this.arduino.MODES.OUTPUT);
   this.arduino.pinMode(this.pwm1, this.arduino.MODES.PWM);
-  this.arduino.digitalWrite(this.dir1, this.arduino.HIGH); // change dir to low
 
   // Motor 2
   this.arduino.pinMode(this.dir2, this.arduino.MODES.OUTPUT);
   this.arduino.pinMode(this.pwm2, this.arduino.MODES.PWM);
-  this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
+ 
+	this.arduino.digitalWrite(this.dir1, this.arduino.HIGH); // change dir to low
+	this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 };
 
 Motor.prototype.setServeAce = function (serveAce) {
@@ -40,6 +41,9 @@ Motor.prototype.power = function (state) {
     case POWER.ON: {
       this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
       this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
+
+      TimeUtils.sleep(500);
+
       changeSpeed.call(this,SPEEDS.FLAT_S,1);
       changeSpeed.call(this,SPEEDS.FLAT_S,2);
 
@@ -48,6 +52,9 @@ Motor.prototype.power = function (state) {
     case POWER.OFF: {
       this.arduino.digitalWrite(this.dir1, this.arduino.LOW);
       this.arduino.digitalWrite(this.dir2, this.arduino.LOW);
+
+      TimeUtils.sleep(500);
+
       changeSpeed.call(this,0,1);
       changeSpeed.call(this,0,2);
 

@@ -56,7 +56,7 @@ RemoteService.prototype.initSubprocesses = function () {
 	sCtrl_process.on('message', msg => {
 		switch(msg.tag) {
 			case 'BALL_COUNT': {
-				bCountChar.onBallCountChange(JSON.stringify({tag: 5, val: msg.val}));
+				bCountChar.onBallCountChange(JSON.stringify({tag:5, numOfBalls:30}));
 				break;
 			}
 

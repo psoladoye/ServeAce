@@ -10,7 +10,7 @@ let Characteristic = bleno.Characteristic;
 let BallCountCharacteristic = function() {
 	BallCountCharacteristic.super_.call(this, {
 		uuid: '2E18',
-		properties: ['notify']
+		properties: ['notify'],
 		descriptors: [
 			new Descriptor({
 				uuid: '2904',
