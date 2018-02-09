@@ -17,8 +17,6 @@ let BLECommandCenter = null;
 let RemoteService = null;
 let remoteService = null;
 
-const def_config = fs.readFileSync('./config/def-conf.json');
-
 if (BLE  && (PLATFORM !== WIN32)) {
   BLECommandCenter = require('bleno');
   RemoteService = require('./gatt_services/remote-service');
@@ -65,8 +63,9 @@ if (BLE  && (PLATFORM !== WIN32)) {
 } else {
   // TODO: Use ad-hoc wifi
   const server = require('./server/server.js')();
-  mCtrl_process = fork('./sub_processes/motor_ctrl.js');
-  sCtrl_process = fork('./sub_processes/stepper_ctrl.js');
+  mCtrl_process = fork('./sub_processes/dc_motors_ctrl.js');
+  sCtrl_process = fork('./sub_processes/carousel_stepper_ctrl.js');
+  sCtrl_process = fork('./sub_processes/horiz_stepper_ctrl.js');
   const COMM_TAGS = require('./common/constants').COMM_TAGS;
 
   server.on('dataReceived', function(data) {
@@ -74,12 +73,17 @@ if (BLE  && (PLATFORM !== WIN32)) {
     switch(data.tag) {
       case COMM_TAGS.DEV_POWER: {
         mCtrl_process.send({ tag:'POWER', val: data.val });
-        sCtrl_process.send({ tag:'STATE', val: data.val });
+        sCtrl_process.send({ tag:'POWER', val: data.val });
+        hCtrl_process.send({ tag:'POWER', val: data.val });
         break;
       }
 
       case COMM_TAGS.DEV_PLAY_PAUSE: {
         sCtrl_process.send({ tag:'STATE', val: data.val });
+        break;
+      }
+
+      case COMM_TAGS.SYNC_SERVE_PROFILE: {
         break;
       }
 

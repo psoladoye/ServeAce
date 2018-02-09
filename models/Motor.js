@@ -15,7 +15,8 @@ function Motor(options, board) {
   this.dir2 = options.dir2;
   this.speed2 = 0;
   this.arduino = board;
-  this.serveAce = null;
+  this.motorsRunning = false;
+  this.currentServeType = SERVE_TYPE.FLAT_S;
 };
 
 Motor.prototype.init = function () {
@@ -32,10 +33,6 @@ Motor.prototype.init = function () {
 	this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 };
 
-Motor.prototype.setServeAce = function (serveAce) {
-  this.serveAce = serveAce;
-};
-
 Motor.prototype.power = function (state) {
   switch (state) {
     case POWER.ON: {
@@ -43,9 +40,8 @@ Motor.prototype.power = function (state) {
       this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 
       TimeUtils.sleep(500);
-
-      changeSpeed.call(this,SPEEDS.FLAT_S,1);
-      changeSpeed.call(this,SPEEDS.FLAT_S,2);
+      this.motorsRunning = true;
+      this.setServe(this.currentServeType);     
 
       break;
     }
@@ -58,6 +54,8 @@ Motor.prototype.power = function (state) {
       changeSpeed.call(this,0,1);
       changeSpeed.call(this,0,2);
 
+      motorsRunning = false;
+
       break;
     }
     default:log('Unknow device state');
@@ -65,7 +63,11 @@ Motor.prototype.power = function (state) {
 };
 
 Motor.prototype.setServe = function (serve) {
-  switch (serve) {
+  this.currentServeType = serve;
+
+  if(!motorsRunning) return;
+
+  switch (this.currentServeType) {
     case SERVE_TYPE.FLAT_S: {
       changeSpeed.call(this,SPEEDS.FLAT_S,1);
       changeSpeed.call(this,SPEEDS.FLAT_S,2);

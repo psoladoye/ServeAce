@@ -3,7 +3,7 @@
 const comm_tags = {
   DEV_POWER: 1,
   DEV_PLAY_PAUSE:2,
-  SETT_SERVE_PROF:3,
+  SYNC_SERVE_PROFILE:3,
 };
 
 const dev_states = {

@@ -4,17 +4,16 @@ const util = require('util');
 const EventEmitter = require('events');
 const TimeUtil = require('../utils/time');
 const Gpio = require('onoff').Gpio;
-const log = require('../utils/logger')('BALL_FEEDER');
+const log = require('../utils/logger')('HORIZ_STEPPER');
 
-function BallFeeder () {
+function HStepper () {
   this.pin = 25;
   this.delay = 2000;
-  this.ballCount = 0;
   this.intervalId = null;
 }
 
-BallFeeder.prototype.init = function () {
-  log.info('Initializing ball feeder...');
+HStepper.prototype.init = function () {
+  log.info('Initializing horizontal stepper...');
   this.led = new Gpio(this.pin, 'out');
   this.button = new Gpio(4, 'in', 'falling');
 
@@ -26,19 +25,19 @@ BallFeeder.prototype.init = function () {
   });
 };
 
-BallFeeder.prototype.start = function () {
+HStepper.prototype.move = function () {
   rotateDeg.call(this);
-}
+};
 
-BallFeeder.prototype.shutDown = function () {
+HStepper.prototype.stop = function () {
+  if(this.intervalId) clearInterval(this.intervalId);
+};
+
+HStepper.prototype.shutDown = function () {
   this.stop();
   if(this.led) this.led.unexport();
   if(this.button) this.button.unexport();
 };
-
-BallFeeder.prototype.stop = function () {
-  if(this.intervalId) clearInterval(this.intervalId);
-}
 
 function rotateDeg(deg, speed) {
   // set direction
@@ -50,16 +49,8 @@ function rotateDeg(deg, speed) {
     led_val = !led_val;
     this.led.writeSync(led_val);
   }, 1000);
-
-  /*for(var i=0; i < steps; i++) {
-    // write to stepper
-    //TimeUtil.sleep(delay);
-
-    // write low to stepper
-    // TimeUtil.sleep(delay);
-  }*/
 }
 
-util.inherits(BallFeeder, EventEmitter);
+util.inherits(HStepper, EventEmitter);
 
-module.exports = BallFeeder;
+module.exports = HStepper;

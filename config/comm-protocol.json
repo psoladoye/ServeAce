@@ -1,22 +1,26 @@
 {
   "POWER": {
-    "tag": "0x00",
-    "value": "0x1"
+    "tag": 0x00,
+    "value": [ 0x01, 0x00 ] // on/off
   },
 
-  "FEED_BALL": {
-
-  },
-
-  "CHANGE_SETT": {
-
+  "PLAY_PAUSE": {
+    "tag":   0x01,
+    "value": [ 0x01, 0x00 ] // play/pause
   },
 
   "RESET": {
-    "tag": "0x04"
+    "tag": 0x02
   },
 
-  "SERVE_PROF": {
-    "tag": "0x05"
+  "SYNC_SERVE_PROFILE": {
+    "tag": 0x03,
+    "value": {
+      "playerLevel": 0x01, // beginner = 0x1, intermmediate = 0x2, advanced = 0x3
+      "delay": 10,
+      "serveType": 0x01, // flat = 0x1, topspin = 0x2, random = 0x3
+      "ballCount": 30,
+      "serveLocation": 0x01, // left, center = 0x2, right = 0x3, random = 0x4
+    }
   }
 }

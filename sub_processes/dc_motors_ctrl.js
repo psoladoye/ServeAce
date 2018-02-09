@@ -31,6 +31,8 @@ board.on('error', (err) => {
   log.error('Error: ', err.message);
 });
 
+let currentProfile = {};
+
 /*board.on('reportversion', () => {
   log.error(`Firmware version: ${board.version.major}.${board.version.minor}`);
 });*/
@@ -50,9 +52,12 @@ process.on('message', (msg) => {
       break;
     }
 
-    case 'SET_SERVEACE': {
-      if(motor) motor.setServeAce(msg);
+    case 'PROFILE': {
+      currentProfile = msg.val;
+      motor.setServe(parseInt(currentProfile.serveType));
+      break;
     }
+
     default: log.error('Unknown option.');
 
   }

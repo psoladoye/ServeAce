@@ -4,6 +4,7 @@ const Stepper = require('../models/BallFeeder');
 const TimeUtils = require('../utils/time');
 
 let ballFeeder = new Stepper();
+let currentProfile = {};
 
 ballFeeder.on('button_pressed', () => {
   log.info('Button pressed listener');
@@ -20,6 +21,22 @@ process.on('message', function(msg) {
         log.info('Shutting down ball feeder');
         ballFeeder.shutDown();
       }
+      break;
+    }
+
+    case 'STATE': {
+      if(msg.val) {
+        ballFeeder.start();
+      } else {
+        ballFeeder.stop();
+      }
+      break;
+    }
+
+    case 'PROFILE': {
+      currentProfile = msg.val;
+      ballFeeder.delay = parseInt(currentProfile.delay) * 1000;
+      ballFeeder.ballCount = parseInt(currentProfile.ballCount);
       break;
     }
 
