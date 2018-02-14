@@ -54,7 +54,7 @@ Motor.prototype.power = function (state) {
       changeSpeed.call(this,0,1);
       changeSpeed.call(this,0,2);
 
-      motorsRunning = false;
+      this.motorsRunning = false;
 
       break;
     }
@@ -65,12 +65,12 @@ Motor.prototype.power = function (state) {
 Motor.prototype.setServe = function (serve) {
   this.currentServeType = serve;
 
-  if(!motorsRunning) return;
+  if(!this.motorsRunning) return;
 
   switch (this.currentServeType) {
     case SERVE_TYPE.FLAT_S: {
-      changeSpeed.call(this,SPEEDS.FLAT_S,1);
-      changeSpeed.call(this,SPEEDS.FLAT_S,2);
+      changeSpeed.call(this,128,1);
+      changeSpeed.call(this,128,2);
       break;
     }
     case SERVE_TYPE.TOPSPIN_S: {

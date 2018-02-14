@@ -1,7 +1,7 @@
 {
   "apps" : [{
     "name"        : "remote-service",
-    "script"      : "Documents/ServeAce/main.js",
+    "script"      : "main.js",
     "args"        : [],
     "watch"       : true,
     "node_args"   : [],
