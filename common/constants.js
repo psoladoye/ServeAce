@@ -35,13 +35,21 @@ const uno = {
 };
 
 const pins = {
-  PLAY_PAUSE: uno.pins.A2,
-  MOTOR_1_PWM: 6,
-  MOTOR_1_DIR: 7,
-  MOTOR_2_PWM: 5,
-  MOTOR_2_DIR: 11,
-  STEPPER_MOTOR_DIR: uno.pins.A0,
-  STEPPER_MOTOR_STEP: uno.pins.A1
+  BALL_SPEED: 16,
+  MOTOR_1_PWM: 5,
+  MOTOR_1_DIR: 4,
+  MOTOR_2_PWM: 9,
+  MOTOR_2_DIR: 8,
+  S_MOTOR_DIR: 23,
+  S_MOTOR_STEP: 24,
+  H_MOTOR_DIR: 5,
+  H_MOTOR_STEP: 6
+};
+
+const internal_tags = {
+  POWER: 1,
+  STATE: 2,
+  PROFILE: 3,
 };
 
 module.exports = {
@@ -49,5 +57,6 @@ module.exports = {
   DEV_STATES: dev_states,
   MOTOR_SPEEDS: motor_speeds,
   SERVE_TYPE: serve_type,
-  ASSIGNED_PINS: pins
+  ASSIGNED_PINS: pins,
+  INTL_TAGS: internal_tags
 }

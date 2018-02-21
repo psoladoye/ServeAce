@@ -5,25 +5,30 @@ const EventEmitter = require('events');
 const TimeUtil = require('../utils/time');
 const Gpio = require('onoff').Gpio;
 const log = require('../utils/logger')('BALL_FEEDER');
+const AccelStepperClass = require('../helper_libs/AccelStepper');
+
 
 function BallFeeder () {
-  this.pin = 25;
-  this.delay = 2000;
-  this.ballCount = 0;
+  this.dirPin = options.dirPin;
+  this.stepPin = options.stepPin;
+  this.delay = options.delay || 3000;
+  this.ballCount = opitons.ballCount || 0;
   this.intervalId = null;
+  this.accelStepper = new AccelStepperClass(this.dirPin, this.stepPin);
 }
 
+/**
+ * [init description]
+ * @return {[type]} [description]
+ */
 BallFeeder.prototype.init = function () {
   log.info('Initializing ball feeder...');
-  this.led = new Gpio(this.pin, 'out');
-  this.button = new Gpio(4, 'in', 'falling');
 
-  this.button.watch((err, val) => {
-    if (err) { throw err; }
-    log.info(`Button val: ${val}`);
-    this.led.writeSync(val ^ 1);
-    this.emit('button_pressed');
-  });
+  this.accelStepper.setMotorSpeed();
+  this.accelStepper.setMaxMotorSpeed();
+  
+
+
 };
 
 BallFeeder.prototype.start = function () {
@@ -32,8 +37,6 @@ BallFeeder.prototype.start = function () {
 
 BallFeeder.prototype.shutDown = function () {
   this.stop();
-  if(this.led) this.led.unexport();
-  if(this.button) this.button.unexport();
 };
 
 BallFeeder.prototype.stop = function () {
@@ -44,11 +47,9 @@ function rotateDeg(deg, speed) {
   // set direction
   let steps = deg*(1/0.255);
   let delay = (1/speed) * 70 * 1E-3;
-  var led_val = false;
 
   this.intervalId = setInterval(() => {
-    led_val = !led_val;
-    this.led.writeSync(led_val);
+    
   }, 1000);
 
   /*for(var i=0; i < steps; i++) {

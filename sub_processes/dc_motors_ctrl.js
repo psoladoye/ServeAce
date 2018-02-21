@@ -5,18 +5,20 @@ const os = require('os');
 const Board = require('firmata');
 const Motor = require('../models/Motor');
 const CONST = require('../common/constants');
-const log = require('../utils/logger')('MOTOR');
+const log = require('../utils/logger')('DC_MOTORS');
 const TimeUtils = require('../utils/time');
 const POWER = CONST.DEV_STATES;
+const INTL_TAGS = CONST.INTL_TAGS;
 
 let motor = null;
 let board_port = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';
+
 let board = new Board(new SerialPort(board_port, {baudRate: 57600}),
   {reportVersionTimeout: 1000}, (err) => {
   if (err) {
     log.error('Error on board connection: ', err.message);
   } else {
-    log.info('[motor-control]: Arduino ready');
+    log.info('Arduino ready');
     motor = new Motor({
       pwm1: CONST.ASSIGNED_PINS.MOTOR_1_PWM,
       dir1: CONST.ASSIGNED_PINS.MOTOR_1_DIR,
@@ -42,7 +44,7 @@ process.on('message', (msg) => {
 
   switch(msg.tag) {
 
-    case 'POWER': {
+    case INTL_TAGS.POWER: {
       log.info(`Motor power state ${msg.val}`);
       if(motor) {
         motor.power(msg.val);
@@ -52,7 +54,8 @@ process.on('message', (msg) => {
       break;
     }
 
-    case 'PROFILE': {
+    case INTL_TAGS.PROFILE: {
+      log.info(`Profile command ${msg.val}`)
       currentProfile = msg.val;
       motor.setServe(parseInt(currentProfile.serveType));
       break;

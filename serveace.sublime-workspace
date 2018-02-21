@@ -3,25 +3,61 @@
 	{
 		"selected_items":
 		[
+			[
+				"distance",
+				"distanceTo"
+			],
+			[
+				"dis",
+				"distanceTo"
+			],
+			[
+				"mo",
+				"moveTo"
+			],
+			[
+				"curr",
+				"currentServeType"
+			],
+			[
+				"ser",
+				"setServe"
+			],
+			[
+				"mot",
+				"motorsRunning"
+			],
+			[
+				"ball",
+				"ballFeeder"
+			],
+			[
+				"bal",
+				"ballFeeder"
+			],
+			[
+				"c",
+				"currentProfile"
+			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "main.js",
+			"file": "helper_libs/AccelStepper.js",
 			"settings":
 			{
-				"buffer_size": 2885,
-				"line_ending": "Unix"
+				"buffer_size": 2310,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Windows.10.Virtual.Desktop.Enhancer.0.11.1/settings.ini",
+			"file": "common/constants.js",
 			"settings":
 			{
-				"buffer_size": 1574,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"buffer_size": 728,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -33,9 +69,13 @@
 	"command_palette":
 	{
 		"height": 490.0,
-		"last_filter": "",
+		"last_filter": "ins",
 		"selected_items":
 		[
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
 			[
 				"",
 				"Package Control: Install Package"
@@ -62,11 +102,25 @@
 	"expanded_folders":
 	[
 		"/C/cygwin64/home/psola/Repositories/ServeAce",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services"
+		"/C/cygwin64/home/psola/Repositories/ServeAce/common"
 	],
 	"file_history":
 	[
 		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services/remote-service.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/horiz_stepper_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/carousel_stepper_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/models/BallFeeder.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/models/HStepper.js",
+		"/C/Users/psola/Downloads/AccelStepper-1.57.1/AccelStepper-1.57.1/src/AccelStepper.h",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/dc_motors_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/proc_management/pm2-app.json",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/startup.sh",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/main.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/models/Motor.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/config/comm-protocol.json",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/common/constants.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/docs/app_payload.json",
+		"/C/Windows.10.Virtual.Desktop.Enhancer.0.11.1/settings.ini",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/stepper_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/server/server.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_characteristics/ball-count-characteristic.js",
@@ -75,7 +129,7 @@
 	],
 	"find":
 	{
-		"height": 52.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
@@ -89,6 +143,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"BallFeeder",
+			"led"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -111,11 +167,39 @@
 			[
 				{
 					"buffer": 0,
-					"file": "main.js",
+					"file": "helper_libs/AccelStepper.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2310,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1868,
+								1868
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 827.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "common/constants.js",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 2885,
+						"buffer_size": 728,
 						"regions":
 						{
 						},
@@ -133,35 +217,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 972.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/C/Windows.10.Virtual.Desktop.Enhancer.0.11.1/settings.ini",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1574,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1294,
-								1294
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 312.0,
+						"translation.y": 111.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -172,11 +228,11 @@
 	],
 	"incremental_find":
 	{
-		"height": 27.0
+		"height": 21.0
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 43.0
 	},
 	"layout":
 	{
@@ -209,7 +265,7 @@
 	"project": "serveace.sublime-project",
 	"replace":
 	{
-		"height": 53.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":

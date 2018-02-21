@@ -29,7 +29,7 @@ Motor.prototype.init = function () {
   this.arduino.pinMode(this.dir2, this.arduino.MODES.OUTPUT);
   this.arduino.pinMode(this.pwm2, this.arduino.MODES.PWM);
  
-	this.arduino.digitalWrite(this.dir1, this.arduino.HIGH); // change dir to low
+	this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
 	this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 };
 
@@ -39,7 +39,6 @@ Motor.prototype.power = function (state) {
       this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
       this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 
-      TimeUtils.sleep(500);
       this.motorsRunning = true;
       this.setServe(this.currentServeType);     
 
@@ -69,20 +68,17 @@ Motor.prototype.setServe = function (serve) {
 
   switch (this.currentServeType) {
     case SERVE_TYPE.FLAT_S: {
-      changeSpeed.call(this,128,1);
-      changeSpeed.call(this,128,2);
+      changeSpeed.call(this,SPEEDS.FLAT_S,1);
+      changeSpeed.call(this,SPEEDS.FLAT_S,2);
       break;
     }
+    
     case SERVE_TYPE.TOPSPIN_S: {
       changeSpeed.call(this,SPEEDS.TOPSPIN_S,1);
       changeSpeed.call(this,SPEEDS.TOPSPIN_S,2);
       break;
     }
-    case SERVE_TYPE.H_TOPSPIN_S: {
-      changeSpeed.call(this,SPEEDS.H_TOPSPIN_S,1);
-      changeSpeed.call(this,SPEEDS.H_TOPSPIN_S,2);
-      break;
-    }
+
     default: log.error('unknown serve type');
   }
 };

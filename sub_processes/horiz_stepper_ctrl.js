@@ -7,11 +7,6 @@ const TimeUtils = require('../utils/time');
 let currentProfile = {};
 let horizStepper = new Stepper();
 
-horizStepper.on('button_pressed', () => {
-  log.info('Button pressed listener');
-	process.send({tag: 'HORIZ'});
-});
-
 process.on('message', function(msg) {
   log.info('Message from remote-service => ', msg);
   switch(msg.tag) {
