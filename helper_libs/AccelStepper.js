@@ -1,11 +1,14 @@
 'use strict';
 
+const log = require('../utils/logger')('AccelStepper');
 const Gpio = require('onoff').Gpio;
 
 function computeNewSpeed() {
+	log.info('Computing new speed');
 	let distanceTo = this.getDistanceToGo();
 
 	let requiredSpeed = 0;
+	let _acceleration = 1;
 
 	if(distanceTo === 0) {
 		return 0;
@@ -59,14 +62,14 @@ class AccelStepper {
 	 * @param {number}
 	 */
 	setMotorSpeed(speed) {
+		log.info('Setting motor speed');
 		this._speed = speed;
 		this._stepInterval = Math.abs(1000.0/this._speed);
 	}
 
 	setMaxMotorSpeed(speed) {
 		this._maxSpeed = speed
-		this.setMotorSpeed(this.computeNewSpeed());
-
+		this.setMotorSpeed(computeNewSpeed.call(this));
 	}
 
 	/**
@@ -88,11 +91,19 @@ class AccelStepper {
 	 * @return {boolean}
 	 */
 	run() {
-
+		log.info('AccelStepper::run');
+		this._dirPin.writeSync(1);
+		this._controlPin.writeSync(1);
 	}
 
+  stop() {
+		log.info('AccelStepper::stop');
+  	this._dirPin.writeSync(0);
+  	this._controlPin.writeSync(0);
+  }
+
 	runToPosition() {
-		
+
 	}
 
 	/**
@@ -115,13 +126,11 @@ class AccelStepper {
 		this._currentPosition = position;
 	}
 
-	disableOutputs() {
-
-	}
-
-	enableOutputs() {
-
-	}
+  shutDown() {
+   	log.info('AccelStepper::shutDown');
+		this._dirPin.unexport();
+		this._controlPin.unexport();
+  }
 };
 
 module.exports = AccelStepper;

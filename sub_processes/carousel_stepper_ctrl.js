@@ -3,6 +3,7 @@ const log = require('../utils/logger')('CAROUSEL_STEPPER');
 const Stepper = require('../models/BallFeeder');
 const TimeUtils = require('../utils/time');
 const ASSIGNED_PINS = require('../common/constants').ASSIGNED_PINS;
+const INTL_TAGS = require('../common/constants').INTL_TAGS;
 
 let ballFeeder = new Stepper({
   dirPin:ASSIGNED_PINS.S_MOTOR_DIR,
@@ -20,9 +21,9 @@ ballFeeder.on('button_pressed', () => {
 
 // Incoming messaage handler
 process.on('message', function(msg) {
-  log.info('Message from remote-service => ', msg);
   switch(msg.tag) {
-    case 'POWER' : {
+    case INTL_TAGS.POWER : {
+			log.info('power');
       if(msg.val) {
         ballFeeder.init();
       } else {
@@ -32,7 +33,8 @@ process.on('message', function(msg) {
       break;
     }
 
-    case 'STATE': {
+    case INTL_TAGS.STATE: {
+			log.info('state');
       if(parseInt(msg.val)) {
         ballFeeder.start();
       } else {
@@ -41,7 +43,8 @@ process.on('message', function(msg) {
       break;
     }
 
-    case 'PROFILE': {
+    case INTL_TAGS.PROFILE: {
+			log.info('profile');
       currentProfile = msg.val;
       ballFeeder.delay = parseInt(currentProfile.delay) * 1000;
       ballFeeder.ballCount = parseInt(currentProfile.ballCount);

@@ -3,14 +3,15 @@
 const log = require('../utils/logger')('H_STEPPER');
 const Stepper = require('../models/HStepper');
 const TimeUtils = require('../utils/time');
+const INTL_TAGS = require('../common/constants').INTL_TAGS;
 
 let currentProfile = {};
 let horizStepper = new Stepper();
 
 process.on('message', function(msg) {
-  log.info('Message from remote-service => ', msg);
   switch(msg.tag) {
-    case 'POWER' : {
+    case INTL_TAGS.POWER: {
+			log.info('power');
       if(msg.val) {
         horizStepper.init();
       } else {
@@ -20,7 +21,8 @@ process.on('message', function(msg) {
       break;
     }
 
-    case 'PROFILE': {
+    case INTL_TAGS.PROFILE: {
+			log.info('profile');
     	if(currentProfile.serveLocation === msg.val.serveLocation)
     		return;
     	currentProfile = msg.val;
