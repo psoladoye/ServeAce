@@ -62,7 +62,10 @@ process.on('message', (msg) => {
     }
 
     case INTL_TAGS.SET_MOTOR_SPEED: {
-      if(motor["speed"+params.motorNum] > 250 || motor["speed"+params.motorNum] = 0 ) {
+			let params = msg.params;
+			let speed = motor["speed"+params.motorNum];
+
+      if(speed > 250 || speed === 0 ) {
         log.info('Speed is at max or min');
         return;
       }
@@ -70,12 +73,12 @@ process.on('message', (msg) => {
       log.info(`Set motor speed command ${msg.params}`);
 
       if(params.direction > 0) {
-        motor["speed"+params.motorNum] += 1 
+        speed += 1 
       } else if(params.direction < 0) {
-        motor["speed"+params.motorNum] -= 1 
+        speed -= 1 
       }
 
-      motor.setSpeed(motor["speed"+params.motorNum], motorNum);
+      motor.setSpeed(speed, params.motorNum);
       break;
     }
 
