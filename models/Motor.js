@@ -48,7 +48,7 @@ Motor.prototype.power = function (state) {
       this.arduino.digitalWrite(this.dir1, this.arduino.LOW);
       this.arduino.digitalWrite(this.dir2, this.arduino.LOW);
 
-      TimeUtils.sleep(500);
+      TimeUtils.sleepMillis(500);
 
       changeSpeed.call(this,0,1);
       changeSpeed.call(this,0,2);
@@ -83,6 +83,10 @@ Motor.prototype.setServe = function (serve) {
   }
 };
 
+Motor.prototype.setSpeed = function(speed, motorNum) {
+  changeSpeed.call(this, speed, motorNum);
+};
+
 let changeSpeed = function (speed, m) {
   if(this["speed"+m] === speed) return;
   if(this["speed"+m] < speed) {
@@ -92,7 +96,7 @@ let changeSpeed = function (speed, m) {
     for (var i = this["speed"+m]; i <= speed; i++) {
       this.arduino.analogWrite(this["pwm"+m],i);
       this["speed"+m] = i;
-      TimeUtils.sleep(1000/60);
+      TimeUtils.sleepMillis(1000/60);
     }
   } else {
     log.info(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
@@ -101,7 +105,7 @@ let changeSpeed = function (speed, m) {
     for (var i = this["speed"+m]; i >= speed; i--) {
       this.arduino.analogWrite(this["pwm"+m],i);
       this["speed"+m] = i;
-      TimeUtils.sleep(1000/60);
+      TimeUtils.sleepMillis(1000/60);
     }
   }
 };

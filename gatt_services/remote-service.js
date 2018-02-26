@@ -1,22 +1,22 @@
 'use strict';
 
-const util = require('util');
-const bleno = require('bleno');
-const PrimaryService = bleno.PrimaryService;
-const fork = require('child_process').fork;
-const log = require('../utils/logger')('REMOTE_SERVICE');
+const util                    = require('util');
+const bleno                   = require('bleno');
+const PrimaryService          = bleno.PrimaryService;
+const fork                    = require('child_process').fork;
+const log                     = require('../utils/logger')('REMOTE_SERVICE');
 
-const COMM_TAGS = require('../common/constants').COMM_TAGS;
-const INTL_TAGS = require('../common/constants').INTL_TAGS;
-const DEV_STATES = require('../common/constants').DEV_STATES;
-const BallCountCharacteristic = require('../gatt_characteristics/ball-count-characteristic');
+const COMM_TAGS                   = require('../common/constants').COMM_TAGS;
+const INTL_TAGS                   = require('../common/constants').INTL_TAGS;
+const DEV_STATES                  = require('../common/constants').DEV_STATES;
+const BallCountCharacteristic     = require('../gatt_characteristics/ball-count-characteristic');
 const CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
 
-let cCenterChar = new CommandCenterCharacteristic();
-let bCountChar = new BallCountCharacteristic();
-let mCtrl_process = null;
-let cCtrl_process = null;
-let hCtrl_process = null;
+let cCenterChar               = new CommandCenterCharacteristic();
+let bCountChar                = new BallCountCharacteristic();
+let mCtrl_process             = null;
+let cCtrl_process             = null;
+let hCtrl_process             = null;
 
 /**
  * {Gatt_Characteristic}
@@ -44,6 +44,16 @@ cCenterChar.on('dataReceived', function(data) {
       mCtrl_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
       cCtrl_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
       hCtrl_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
+      break;
+    }
+
+    case COMM_TAGS.CHANGE_MOTOR_SPEED: {
+      mCtrl_process.send({ tag:INTL_TAGS.SET_MOTOR_SPEED, params: parsedData.val });
+      break;
+    }
+
+    case COMM_TAGS.ROTATE_HORIZ_MOTOR: {
+      hCtrl_process.send({ tag:INTL_TAGS.SET_HORIZ_MOTOR_DIR, val: parsedData.val });
       break;
     }
 

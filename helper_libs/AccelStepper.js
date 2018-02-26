@@ -1,7 +1,7 @@
 'use strict';
 
-const log = require('../utils/logger')('AccelStepper');
-const Gpio = require('onoff').Gpio;
+const log 		= require('../utils/logger')('AccelStepper');
+const Gpio 		= require('onoff').Gpio;
 
 function computeNewSpeed() {
 	log.info('Computing new speed');
@@ -50,12 +50,12 @@ function computeNewSpeed() {
 
 class AccelStepper {
 	constructor(dirPin, controlPin) {
-		this._dirPin = new Gpio(dirPin, 'out');
-		this._controlPin = new Gpio(controlPin, 'out');
-		this._speed = 0; 					// steps per second
-		this._currentPosition = 0; 			// steps
-		this._targetPosition = 0; 			// steps
-		this._stepInterval = 0; 			// millis
+		this._dirPin 			= new Gpio(dirPin, 'out');
+		this._controlPin 		= new Gpio(controlPin, 'out');
+		this._speed 			= 0; 			// steps per second
+		this._currentPosition 	= 0; 			// steps
+		this._targetPosition 	= 0; 			// steps
+		this._stepInterval 		= 0; 			// millis
 	}
 
 	/**

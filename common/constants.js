@@ -4,6 +4,8 @@ const comm_tags = {
   DEV_POWER: 1,
   DEV_PLAY_PAUSE:2,
   SYNC_SERVE_PROFILE:3,
+  CHANGE_MOTOR_SPEED: 4,
+  ROTATE_HORIZ_MOTOR: 5
 };
 
 const dev_states = {
@@ -19,8 +21,13 @@ const motor_speeds = {
 
 const serve_type = {
   FLAT_S: 1,
-  TOPSPIN_S: 2,
-  H_TOPSPIN_S: 3
+  TOPSPIN_S: 2
+};
+
+const serve_loc = {
+  LEFT: 1,
+  CENTER: 2,
+  RIGHT: 3
 };
 
 const uno = {
@@ -50,6 +57,8 @@ const internal_tags = {
   POWER: 1,
   STATE: 2,
   PROFILE: 3,
+  SET_MOTOR_SPEED: 4,
+  SET_HORIZ_MOTOR_DIR: 5
 };
 
 module.exports = {
@@ -58,5 +67,6 @@ module.exports = {
   MOTOR_SPEEDS: motor_speeds,
   SERVE_TYPE: serve_type,
   ASSIGNED_PINS: pins,
-  INTL_TAGS: internal_tags
+  INTL_TAGS: internal_tags,
+  SERVE_LOC: serve_loc
 }

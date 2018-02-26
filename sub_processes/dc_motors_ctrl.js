@@ -55,9 +55,27 @@ process.on('message', (msg) => {
     }
 
     case INTL_TAGS.PROFILE: {
-      log.info(`Profile command ${msg.val}`)
+      log.info(`Profile command ${msg.val}`);
       currentProfile = msg.val;
       motor.setServe(parseInt(currentProfile.serveType));
+      break;
+    }
+
+    case INTL_TAGS.SET_MOTOR_SPEED: {
+      if(motor["speed"+params.motorNum] > 250 || motor["speed"+params.motorNum] = 0 ) {
+        log.info('Speed is at max or min');
+        return;
+      }
+
+      log.info(`Set motor speed command ${msg.params}`);
+
+      if(params.direction > 0) {
+        motor["speed"+params.motorNum] += 1 
+      } else if(params.direction < 0) {
+        motor["speed"+params.motorNum] -= 1 
+      }
+
+      motor.setSpeed(motor["speed"+params.motorNum], motorNum);
       break;
     }
 
@@ -73,6 +91,6 @@ function cleanUp() {
 
 process.on('SIGINT', () => {
   cleanUp();
-  TimeUtils.sleep(1000);
+  TimeUtils.sleepMillis(1000);
   process.exit();
 });

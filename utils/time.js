@@ -10,5 +10,5 @@ function Sleep(milliseconds) {
 }
 
 module.exports = {
-  sleep:Sleep
+  sleepMillis:Sleep
 };

@@ -1,20 +1,20 @@
 'use strict';
 
-const util = require('util');
-const EventEmitter = require('events');
-const TimeUtil = require('../utils/time');
-const Gpio = require('onoff').Gpio;
-const log = require('../utils/logger')('BALL_FEEDER');
+const util              = require('util');
+const EventEmitter      = require('events');
+const TimeUtil          = require('../utils/time');
+const Gpio              = require('onoff').Gpio;
+const log               = require('../utils/logger')('BALL_FEEDER');
 const AccelStepperClass = require('../helper_libs/AccelStepper');
 
 
 function BallFeeder (options) {
-  this.dirPin = options.dirPin;
-  this.stepPin = options.stepPin;
-  this.delay = options.delay || 3000;
-  this.ballCount = options.ballCount || 0;
-  this.intervalId = null;
-  this.accelStepper = new AccelStepperClass(this.dirPin, this.stepPin);
+  this.dirPin         = options.dirPin;
+  this.stepPin        = options.stepPin;
+  this.delay          = options.delay || 3000;
+  this.ballCount      = options.ballCount || 0;
+  this.intervalId     = null;
+  this.accelStepper   = new AccelStepperClass(this.dirPin, this.stepPin);
 }
 
 /**

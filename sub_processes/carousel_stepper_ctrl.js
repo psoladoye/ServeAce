@@ -1,9 +1,9 @@
 'use strict';
-const log = require('../utils/logger')('CAROUSEL_STEPPER');
-const Stepper = require('../models/BallFeeder');
-const TimeUtils = require('../utils/time');
-const ASSIGNED_PINS = require('../common/constants').ASSIGNED_PINS;
-const INTL_TAGS = require('../common/constants').INTL_TAGS;
+const log               = require('../utils/logger')('CAROUSEL_STEPPER');
+const Stepper           = require('../models/BallFeeder');
+const TimeUtils         = require('../utils/time');
+const ASSIGNED_PINS     = require('../common/constants').ASSIGNED_PINS;
+const INTL_TAGS         = require('../common/constants').INTL_TAGS;
 
 let ballFeeder = new Stepper({
   dirPin:ASSIGNED_PINS.S_MOTOR_DIR,
@@ -60,6 +60,6 @@ process.on('message', function(msg) {
 process.on('SIGINT', () => {
   log.info('SIGINT Shutting down stepper');
   ballFeeder.shutDown();
-  TimeUtils.sleep(1000);
+  TimeUtils.sleepMillis(1000);
   process.exit();
 });
