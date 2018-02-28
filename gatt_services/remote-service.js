@@ -80,6 +80,9 @@ RemoteService.prototype.initSubprocesses = function () {
 	mCtrl_process.on('message', msg => {
 		log.info(msg);
 	});
+	mCtrl_process.on('error', (err) => {
+		log.error(err);
+	});
 
 
   /**
@@ -96,6 +99,9 @@ RemoteService.prototype.initSubprocesses = function () {
 			default: log.info('Uknown tag');
 		}
 	});
+	cCtrl_process.on('error', (err) => {
+		log.error(err);
+	});
 
   /**
    * {Subprocess} Handles horizontal-rotator commands
@@ -104,6 +110,9 @@ RemoteService.prototype.initSubprocesses = function () {
   hCtrl_process.on('message', msg => {
     log.info(msg);
   });
+	hCtrl_process.on('error', (err) => {
+		log.error(err);
+	});
 };
 
 util.inherits(RemoteService, PrimaryService);

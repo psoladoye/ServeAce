@@ -64,18 +64,19 @@ process.on('message', (msg) => {
     case INTL_TAGS.SET_MOTOR_SPEED: {
 			let params = msg.params;
 			let speed = motor["speed"+params.motorNum];
-
-      if(speed > 250 || speed === 0 ) {
-        log.info('Speed is at max or min');
-        return;
-      }
+			log.info(`Speed: ${speed}`);
 
       log.info(`Set motor speed command ${msg.params}`);
 
       if(params.direction > 0) {
-        speed += 1 
+        speed += 2 
       } else if(params.direction < 0) {
-        speed -= 1 
+        speed -= 2 
+      }
+
+			if(speed > 250 || speed === 0 ) {
+        log.info('Speed is at max or min');
+        return;
       }
 
       motor.setSpeed(speed, params.motorNum);
@@ -89,11 +90,22 @@ process.on('message', (msg) => {
 
 function cleanUp() {
   log.info('Killing process by SIGINT');
-  if(motor) motor.power(POWER.OFF);
+  if(motor) motor.power(POWER.OFF);	
+	if(board) {
+		TimeUtils.sleepMillis(500);
+		board.transport.flush((err) => {
+			log.error(err);
+		});
+
+		TimeUtils.sleepMillis(500);
+		board.transport.close((err) => {
+			log.error(err);
+		});
+	}
 }
 
 process.on('SIGINT', () => {
   cleanUp();
-  TimeUtils.sleepMillis(1000);
+  TimeUtils.sleepMillis(500);
   process.exit();
 });

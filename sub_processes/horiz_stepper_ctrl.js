@@ -1,9 +1,10 @@
 'use strict';
 
-const log           = require('../utils/logger')('H_STEPPER');
-const Stepper       = require('../models/HStepper');
-const TimeUtils     = require('../utils/time');
-const INTL_TAGS     = require('../common/constants').INTL_TAGS;
+const log           	= require('../utils/logger')('H_STEPPER');
+const Stepper       	= require('../models/HStepper');
+const TimeUtils     	= require('../utils/time');
+const INTL_TAGS     	= require('../common/constants').INTL_TAGS;
+const SERVE_LOCATION	= require('../common/constants').SERVE_LOC;
 
 let currentProfile  = {};
 let horizStepper    = new Stepper();
@@ -16,8 +17,8 @@ process.on('message', function(msg) {
       if(msg.val) {
         horizStepper.init();
       } else {
-        log.info('Shutting down ball feeder');
-        horizStepper.shutDown();
+        log.info('Stop horiz motor');
+        horizStepper.stop();
       }
 
       break;
@@ -49,9 +50,9 @@ process.on('message', function(msg) {
 });
 
 process.on('SIGINT', () => {
-  log.info('SIGINT Shutting down stepper');
+  log.info('SIGINT Shutting down horiztontal rotator');
   horizStepper.shutDown();
-  TimeUtils.sleepMillis(1000);
+  TimeUtils.sleepMillis(500);
   process.exit();
 });
 

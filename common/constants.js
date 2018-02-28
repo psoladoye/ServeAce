@@ -14,9 +14,9 @@ const dev_states = {
 };
 
 const motor_speeds = {
-  FLAT_S: 64,
-  TOPSPIN_S: 127,
-  H_TOPSPIN_S: 191
+  FLAT_S: 128,
+  TOPSPIN_S: 190,
+  H_TOPSPIN_S: 230
 };
 
 const serve_type = {

@@ -27,8 +27,8 @@ process.on('message', function(msg) {
       if(msg.val) {
         ballFeeder.init();
       } else {
-        log.info('Shutting down ball feeder');
-        ballFeeder.shutDown();
+        log.info('stop ball feeder');
+        ballFeeder.stop();
       }
       break;
     }
@@ -60,6 +60,6 @@ process.on('message', function(msg) {
 process.on('SIGINT', () => {
   log.info('SIGINT Shutting down stepper');
   ballFeeder.shutDown();
-  TimeUtils.sleepMillis(1000);
+  TimeUtils.sleepMillis(500);
   process.exit();
 });

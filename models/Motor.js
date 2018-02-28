@@ -68,13 +68,15 @@ Motor.prototype.setServe = function (serve) {
 
   switch (this.currentServeType) {
     case SERVE_TYPE.FLAT_S: {
+			log.info('Serve type: flat');
       changeSpeed.call(this,SPEEDS.FLAT_S,1);
       changeSpeed.call(this,SPEEDS.FLAT_S,2);
       break;
     }
 
     case SERVE_TYPE.TOPSPIN_S: {
-      changeSpeed.call(this,SPEEDS.TOPSPIN_S,1);
+			log.info('Serve type: topsin');
+      changeSpeed.call(this,SPEEDS.FLAT_S,1);
       changeSpeed.call(this,SPEEDS.TOPSPIN_S,2);
       break;
     }
@@ -84,7 +86,8 @@ Motor.prototype.setServe = function (serve) {
 };
 
 Motor.prototype.setSpeed = function(speed, motorNum) {
-  changeSpeed.call(this, speed, motorNum);
+  log.info(`Set speed : ${speed} motor: ${motorNum}`);
+	changeSpeed.call(this, speed, motorNum);
 };
 
 let changeSpeed = function (speed, m) {
