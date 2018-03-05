@@ -31,7 +31,14 @@ Motor.prototype.init = function () {
 
 	this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
 	this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
+	this.arduino.pinMode(5, this.arduino.MODES.ANALOG);
 };
+
+Motor.prototype.readAnalog = function() {
+	this.arduino.analogRead(5, (val) => {
+		log.info((val/1023) * 5);
+	});
+}
 
 Motor.prototype.power = function (state) {
   switch (state) {
@@ -48,7 +55,7 @@ Motor.prototype.power = function (state) {
       this.arduino.digitalWrite(this.dir1, this.arduino.LOW);
       this.arduino.digitalWrite(this.dir2, this.arduino.LOW);
 
-      TimeUtils.sleepMillis(500);
+      TimeUtils.sleepMillis(100);
 
       changeSpeed.call(this,0,1);
       changeSpeed.call(this,0,2);
@@ -67,19 +74,47 @@ Motor.prototype.setServe = function (serve) {
   if(!this.motorsRunning) return;
 
   switch (this.currentServeType) {
-    case SERVE_TYPE.FLAT_S: {
-			log.info('Serve type: flat');
-      changeSpeed.call(this,SPEEDS.FLAT_S,1);
-      changeSpeed.call(this,SPEEDS.FLAT_S,2);
+    case SERVE_TYPE.FLAT_B: {
+			log.info('Serve type: Beginner flat serve');
+      changeSpeed.call(this, 179, 1);
+      changeSpeed.call(this, 179 ,2);
       break;
     }
 
-    case SERVE_TYPE.TOPSPIN_S: {
-			log.info('Serve type: topsin');
-      changeSpeed.call(this,SPEEDS.FLAT_S,1);
-      changeSpeed.call(this,SPEEDS.TOPSPIN_S,2);
+		case SERVE_TYPE.FLAT_I: {
+			log.info('Serve type: Intermediate flat serve');
+			changeSpeed.call(this, 204, 1);
+			changeSpeed.call(this, 204, 2);
+			break;
+		}
+
+		case SERVE_TYPE.FLAT_A: {
+			log.info('Serve type: Advanced flat serve');
+			changeSpeed.call(this, 222, 1);
+			changeSpeed.call(this, 222, 2);
+			break;
+		}
+
+    case SERVE_TYPE.TOPSPIN_B: {
+			log.info('Serve type: Beginner topsin');
+      changeSpeed.call(this, 166, 1);
+      changeSpeed.call(this, 191, 2);
       break;
     }
+
+		case SERVE_TYPE.TOPSPIN_I: {
+			log.info('Serve type: Intermediate topspin');
+			changeSpeed.call(this, 204, 1);
+			changeSpeed.call(this, 230, 2);
+			break;
+		}
+
+		case SERVE_TYPE.TOPSPIN_A: {
+			log.info('Serve type: Advanced topspin');
+			changeSpeed.call(this, 186, 1);
+			changeSpeed.call(this, 222, 2);
+			break;
+		}
 
     default: log.error('unknown serve type');
   }

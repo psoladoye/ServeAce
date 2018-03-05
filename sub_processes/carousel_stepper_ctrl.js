@@ -35,7 +35,7 @@ process.on('message', function(msg) {
 
     case INTL_TAGS.STATE: {
 			log.info('state');
-      if(parseInt(msg.val)) {
+      if(msg.val) {
         ballFeeder.start();
       } else {
         ballFeeder.stop();
@@ -58,7 +58,7 @@ process.on('message', function(msg) {
 
 // Cleanup process
 process.on('SIGINT', () => {
-  log.info('SIGINT Shutting down stepper');
+  log.info('SIGINT Shutting down carousel');
   ballFeeder.shutDown();
   TimeUtils.sleepMillis(500);
   process.exit();

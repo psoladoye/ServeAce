@@ -43,6 +43,10 @@ process.on('message', (msg) => {
   log.info('Incoming message => ', msg);
 
   switch(msg.tag) {
+		case 13: {
+			motor.readAnalog();
+			break;
+		};
 
     case INTL_TAGS.POWER: {
       log.info(`Motor power state ${msg.val}`);
@@ -56,22 +60,26 @@ process.on('message', (msg) => {
 
     case INTL_TAGS.PROFILE: {
       log.info(`Profile command ${msg.val}`);
+			if(!motor) return;
+
       currentProfile = msg.val;
-      motor.setServe(parseInt(currentProfile.serveType));
+      motor.setServe(parseInt(currentProfile.serveType) * parseInt(currentProfile.playerLevel));
       break;
     }
 
     case INTL_TAGS.SET_MOTOR_SPEED: {
+      log.info(`Set motor speed command ${msg.params}`);
+
+			if(!motor) return;
+
 			let params = msg.params;
 			let speed = motor["speed"+params.motorNum];
 			log.info(`Speed: ${speed}`);
 
-      log.info(`Set motor speed command ${msg.params}`);
-
       if(params.direction > 0) {
-        speed += 2 
+        speed += 2;
       } else if(params.direction < 0) {
-        speed -= 2 
+        speed -= 2;
       }
 
 			if(speed > 250 || speed === 0 ) {
@@ -84,7 +92,6 @@ process.on('message', (msg) => {
     }
 
     default: log.error('Unknown option.');
-
   }
 });
 
@@ -92,12 +99,12 @@ function cleanUp() {
   log.info('Killing process by SIGINT');
   if(motor) motor.power(POWER.OFF);	
 	if(board) {
-		TimeUtils.sleepMillis(500);
+		TimeUtils.sleepMillis(100);
 		board.transport.flush((err) => {
 			log.error(err);
 		});
 
-		TimeUtils.sleepMillis(500);
+		TimeUtils.sleepMillis(100);
 		board.transport.close((err) => {
 			log.error(err);
 		});
@@ -106,6 +113,6 @@ function cleanUp() {
 
 process.on('SIGINT', () => {
   cleanUp();
-  TimeUtils.sleepMillis(500);
+  TimeUtils.sleepMillis(100);
   process.exit();
 });

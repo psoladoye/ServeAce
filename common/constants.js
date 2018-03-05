@@ -20,8 +20,12 @@ const motor_speeds = {
 };
 
 const serve_type = {
-  FLAT_S: 1,
-  TOPSPIN_S: 2
+  FLAT_B: 5,
+	FLAT_I: 6,
+	FLAT_A: 7,
+  TOPSPIN_B: 10,
+	TOPSPIN_I: 12,
+	TOPSPIN_A: 14
 };
 
 const serve_loc = {

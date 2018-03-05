@@ -5,8 +5,8 @@ const EventEmitter      = require('events');
 const TimeUtil          = require('../utils/time');
 const Gpio              = require('onoff').Gpio;
 const log               = require('../utils/logger')('BALL_FEEDER');
-const AccelStepperClass = require('../helper_libs/AccelStepper');
-
+//const AccelStepperClass = require('../helper_libs/AccelStepper');
+//const StepperMotor			= require('../helper_libs/StepperLib');
 
 function BallFeeder (options) {
   this.dirPin         = options.dirPin;
@@ -14,7 +14,8 @@ function BallFeeder (options) {
   this.delay          = options.delay || 3000;
   this.ballCount      = options.ballCount || 0;
   this.intervalId     = null;
-  this.accelStepper   = new AccelStepperClass(this.dirPin, this.stepPin);
+	this.testpin = new Gpio(24, 'out');
+  //this.stepperMotor   = new StepperMotor({dirPin:options.dirPin, stepPin:options.stepPin});
 }
 
 /**
@@ -23,43 +24,25 @@ function BallFeeder (options) {
  */
 BallFeeder.prototype.init = function () {
   log.info('Initializing ball feeder...');
-
-  this.accelStepper.setMotorSpeed(1);
-  this.accelStepper.setMaxMotorSpeed(5);
-
+	//this.stepperMotor.init();
 };
 
 BallFeeder.prototype.start = function () {
-  this.accelStepper.run();
-}
+  log.info('start');
+	this.testpin.writeSync(1);
+	//this.stepperMotor.step(null, 90);
+};
 
 BallFeeder.prototype.shutDown = function () {
-  this.accelStepper.stop();
-	this.accelStepper.shutDown();
+	//this.stepperMotor.shutdown();
+	this.testpin.unexport();
 };
 
 BallFeeder.prototype.stop = function () {
+	log.info('stop');
+	this.testpin.writeSync(0);
   if(this.intervalId) clearInterval(this.intervalId);
-}
-
-/*function rotateDeg(deg, speed) {
-  // set direction
-  let steps = deg*(1/0.255);
-  let delay = (1/speed) * 70 * 1E-3;
-
-  this.intervalId = setInterval(() => {
-
-  }, 1000);
-
-  /*for(var i=0; i < steps; i++) {
-    // write to stepper
-    //TimeUtil.sleep(delay);
-
-    // write low to stepper
-    // TimeUtil.sleep(delay);
-  }
-}*/
+};
 
 util.inherits(BallFeeder, EventEmitter);
-
 module.exports = BallFeeder;

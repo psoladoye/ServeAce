@@ -37,6 +37,7 @@ cCenterChar.on('dataReceived', function(data) {
 
     case COMM_TAGS.DEV_PLAY_PAUSE: {
       cCtrl_process.send({ tag:INTL_TAGS.STATE, val: parsedData.val });
+			mCtrl_process.send({ tag:13 });
       break;
     }
 
