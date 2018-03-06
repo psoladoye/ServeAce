@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"mot",
+				"motorNum"
+			],
+			[
+				"prot",
+				"prototype"
+			],
+			[
+				"pars",
+				"parsedData"
+			],
+			[
 				"A",
 				"AccelStepperClass"
 			],
@@ -28,10 +40,6 @@
 				"setServe"
 			],
 			[
-				"mot",
-				"motorsRunning"
-			],
-			[
 				"ball",
 				"ballFeeder"
 			],
@@ -51,7 +59,7 @@
 			"file": "common/constants.js",
 			"settings":
 			{
-				"buffer_size": 819,
+				"buffer_size": 982,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -60,52 +68,32 @@
 			"file": "gatt_services/remote-service.js",
 			"settings":
 			{
-				"buffer_size": 2809,
+				"buffer_size": 3492,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "models/BallFeeder.js",
+			"file": "sub_processes/dc_motors_ctrl.js",
 			"settings":
 			{
-				"buffer_size": 1434,
-				"encoding": "UTF-8",
+				"buffer_size": 2579,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "sub_processes/horiz_stepper_ctrl.js",
+			"file": "gatt_characteristics/command-center-characteristic.js",
 			"settings":
 			{
-				"buffer_size": 925,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "helper_libs/AccelStepper.js",
-			"settings":
-			{
-				"buffer_size": 2410,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "sub_processes/carousel_stepper_ctrl.js",
-			"settings":
-			{
-				"buffer_size": 1416,
-				"encoding": "UTF-8",
+				"buffer_size": 737,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "startup.sh",
+			"file": "models/Motor.js",
 			"settings":
 			{
-				"buffer_size": 131,
-				"encoding": "UTF-8",
+				"buffer_size": 3175,
 				"line_ending": "Unix"
 			}
 		}
@@ -152,27 +140,30 @@
 	[
 		"/C/cygwin64/home/psola/Repositories/ServeAce",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/common",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_characteristics",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes"
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/utils"
 	],
 	"file_history":
 	[
-		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/dc_motors_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/utils/time.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/Motor.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs/AccelStepper.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services/remote-service.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/horiz_stepper_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/carousel_stepper_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/horiz_stepper_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/common/constants.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services/remote-service.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/BallFeeder.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs/AccelStepper.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/startup.sh",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/dc_motors_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/HStepper.js",
 		"/C/Users/psola/Downloads/AccelStepper-1.57.1/AccelStepper-1.57.1/src/AccelStepper.h",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/proc_management/pm2-app.json",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/startup.sh",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/main.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/config/comm-protocol.json",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/common/constants.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/docs/app_payload.json",
 		"/C/Windows.10.Virtual.Desktop.Enhancer.0.11.1/settings.ini",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/stepper_ctrl.js",
@@ -187,9 +178,10 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 104.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -197,6 +189,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"TimeUtils.sleep",
+			"    =",
 			"BallFeeder",
 			"led"
 		],
@@ -216,7 +210,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -225,15 +219,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 819,
+						"buffer_size": 982,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								530,
-								518
+								123,
+								141
 							]
 						],
 						"settings":
@@ -243,10 +237,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 322.0,
+						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -255,15 +249,45 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2809,
+						"buffer_size": 3492,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								704,
-								704
+								2034,
+								2049
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 720.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "sub_processes/dc_motors_ctrl.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2579,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1672,
+								1672
 							]
 						],
 						"settings":
@@ -280,42 +304,12 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "models/BallFeeder.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1434,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								623,
-								623
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
 					"buffer": 3,
-					"file": "sub_processes/horiz_stepper_ctrl.js",
+					"file": "gatt_characteristics/command-center-characteristic.js",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 925,
+						"buffer_size": 737,
 						"regions":
 						{
 						},
@@ -341,48 +335,19 @@
 				},
 				{
 					"buffer": 4,
-					"file": "helper_libs/AccelStepper.js",
+					"file": "models/Motor.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2410,
+						"buffer_size": 3175,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1242,
-								1242
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "sub_processes/carousel_stepper_ctrl.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1416,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								345,
-								345
+								2237,
+								2237
 							]
 						],
 						"settings":
@@ -392,38 +357,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 912.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "startup.sh",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 131,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								42,
-								42
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
+					"stack_index": 4,
 					"type": "text"
 				}
 			]

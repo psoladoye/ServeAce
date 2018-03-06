@@ -1,21 +1,21 @@
 'use strict';
 
-const CONST = require('../common/constants');
-const SPEEDS = CONST.MOTOR_SPEEDS;
-const SERVE_TYPE = CONST.SERVE_TYPE;
-const POWER = CONST.DEV_STATES;
-const TimeUtils = require('../utils/time');
-const log = require('../utils/logger')('MOTOR_MODEL');
+const CONST             = require('../common/constants');
+const SPEEDS            = CONST.MOTOR_SPEEDS;
+const SERVE_TYPE        = CONST.SERVE_TYPE;
+const POWER             = CONST.DEV_STATES;
+const TimeUtils         = require('../utils/time');
+const log               = require('../utils/logger')('MOTOR_MODEL');
 
 function Motor(options, board) {
-  this.pwm1 = options.pwm1;
-  this.dir1 = options.dir1;
-  this.speed1 = 0;
-  this.pwm2 = options.pwm2;
-  this.dir2 = options.dir2;
-  this.speed2 = 0;
-  this.arduino = board;
-  this.motorsRunning = false;
+  this.pwm1             = options.pwm1;
+  this.dir1             = options.dir1;
+  this.speed1           = 0;
+  this.pwm2             = options.pwm2;
+  this.dir2             = options.dir2;
+  this.speed2           = 0;
+  this.arduino          = board;
+  this.motorsRunning    = false;
   this.currentServeType = SERVE_TYPE.FLAT_S;
 };
 

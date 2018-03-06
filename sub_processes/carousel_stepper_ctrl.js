@@ -13,9 +13,9 @@ let ballFeeder = new Stepper({
 let currentProfile = {};
 
 // Update main on BALL_COUNT
-ballFeeder.on('button_pressed', () => {
+ballFeeder.on('ballCountUpdate', (value) => {
   log.info('Button pressed listener');
-	process.send({tag: 'BALL_COUNT'});
+	process.send({ tag: 'BALL_COUNT', val: {tag: 5, numOfBalls: value} });
 });
 
 
@@ -36,7 +36,7 @@ process.on('message', function(msg) {
     case INTL_TAGS.STATE: {
 			log.info('state');
       if(msg.val) {
-        ballFeeder.start();
+        ballFeeder.run();
       } else {
         ballFeeder.stop();
       }

@@ -6,14 +6,18 @@ const PrimaryService          = bleno.PrimaryService;
 const fork                    = require('child_process').fork;
 const log                     = require('../utils/logger')('REMOTE_SERVICE');
 
+const SPEED_FEEDBACK              = 1;
+const MOTOR_ANGLE                 = 1;
 const COMM_TAGS                   = require('../common/constants').COMM_TAGS;
 const INTL_TAGS                   = require('../common/constants').INTL_TAGS;
 const DEV_STATES                  = require('../common/constants').DEV_STATES;
 const BallCountCharacteristic     = require('../gatt_characteristics/ball-count-characteristic');
 const CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
+const MotorFeedbackCharacteristic = require('../gatt_characteristics/motor-feedback-characteristic');
 
 let cCenterChar               = new CommandCenterCharacteristic();
 let bCountChar                = new BallCountCharacteristic();
+let mFeedackChar              = new MotorFeedbackCharacteristic();
 let mCtrl_process             = null;
 let cCtrl_process             = null;
 let hCtrl_process             = null;
@@ -67,7 +71,8 @@ function RemoteService() {
     uuid: 'd270',
     characteristics: [
       cCenterChar,
-      bCountChar
+      bCountChar,
+      mFeedackChar
     ]
   });
 }
@@ -78,9 +83,19 @@ RemoteService.prototype.initSubprocesses = function () {
    * {Subprocess} Handles firing-motor commands
    */
   mCtrl_process = fork('./sub_processes/dc_motors_ctrl.js');
-	mCtrl_process.on('message', msg => {
+
+	mCtrl_process.on('message', (msg) => {
 		log.info(msg);
+    switch(parseInt(msg.tag)) {
+      case SPEED_FEEDBACK: {
+        mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
+        break;
+      }
+
+      default: log.info('Unknown tag');
+    }
 	});
+
 	mCtrl_process.on('error', (err) => {
 		log.error(err);
 	});
@@ -90,7 +105,7 @@ RemoteService.prototype.initSubprocesses = function () {
    * {Subprocess} Handles carousel stepper-motor commands
    */
   cCtrl_process = fork('./sub_processes/carousel_stepper_ctrl.js');
-	cCtrl_process.on('message', msg => {
+	cCtrl_process.on('message', (msg) => {
 		switch(msg.tag) {
 			case 'BALL_COUNT': {
 				bCountChar.onBallCountChange(JSON.stringify(msg.val));
@@ -108,9 +123,19 @@ RemoteService.prototype.initSubprocesses = function () {
    * {Subprocess} Handles horizontal-rotator commands
    */
   hCtrl_process = fork('./sub_processes/horiz_stepper_ctrl.js');
+
   hCtrl_process.on('message', msg => {
     log.info(msg);
+    switch(parseInt(msg.tag)) {
+      case: MOTOR_ANGLE {
+        mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
+        break;
+      }
+
+      default: log.info('Unknown tag');
+    }
   });
+
 	hCtrl_process.on('error', (err) => {
 		log.error(err);
 	});

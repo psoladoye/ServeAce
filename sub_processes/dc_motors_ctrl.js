@@ -1,19 +1,21 @@
 'use strict';
 
-const SerialPort = require('serialport');
-const os = require('os');
-const Board = require('firmata');
-const Motor = require('../models/Motor');
-const CONST = require('../common/constants');
-const log = require('../utils/logger')('DC_MOTORS');
-const TimeUtils = require('../utils/time');
-const POWER = CONST.DEV_STATES;
-const INTL_TAGS = CONST.INTL_TAGS;
+const SerialPort            = require('serialport');
+const os                    = require('os');
+const Board                 = require('firmata');
+const Motor                 = require('../models/Motor');
+const CONST                 = require('../common/constants');
+const log                   = require('../utils/logger')('DC_MOTORS');
+const TimeUtils             = require('../utils/time');
+const POWER                 = CONST.DEV_STATES;
+const INTL_TAGS             = CONST.INTL_TAGS;
+const SPEED_FEEDBACK        = 1;
 
-let motor = null;
-let board_port = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';
+let currentProfile          = {};
+let motor                   = null;
+let board_port              = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';
 
-let board = new Board(new SerialPort(board_port, {baudRate: 57600}),
+let board                   = new Board(new SerialPort(board_port, {baudRate: 57600}),
   {reportVersionTimeout: 1000}, (err) => {
   if (err) {
     log.error('Error on board connection: ', err.message);
@@ -33,8 +35,6 @@ board.on('error', (err) => {
   log.error('Error: ', err.message);
 });
 
-let currentProfile = {};
-
 /*board.on('reportversion', () => {
   log.error(`Firmware version: ${board.version.major}.${board.version.minor}`);
 });*/
@@ -43,10 +43,10 @@ process.on('message', (msg) => {
   log.info('Incoming message => ', msg);
 
   switch(msg.tag) {
-		case 13: {
+		/*case 13: {
 			motor.readAnalog();
 			break;
-		};
+		};*/
 
     case INTL_TAGS.POWER: {
       log.info(`Motor power state ${msg.val}`);
@@ -87,6 +87,10 @@ process.on('message', (msg) => {
         return;
       }
 
+      process.send({ 
+        tag: SPEED_FEEDBACK, 
+        val: { tag:, motorNum: params.motorNum, speed: parseInt((speed/255) * 100)}
+      });
       motor.setSpeed(speed, params.motorNum);
       break;
     }
