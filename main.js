@@ -1,94 +1,59 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs');
-const fork = require('child_process').fork;
-const os = require('os');
-const log = require('./utils/logger')('MAIN');
+const path              = require('path');
+const fs                = require('fs');
+const fork              = require('child_process').fork;
+const log               = require('./utils/logger')('MAIN');
 
-let mCtrl_process = null;
-let sCtrl_process = null;
+let mCtrl_process       = null;
+let sCtrl_process       = null;
 
-let BLECommandCenter = null;
-let RemoteService = null;
-let remoteService = null;
+let BLECommandCenter    = null;
+let RemoteService       = null;
+let remoteService       = null;
 
-if (BLE  && (PLATFORM !== WIN32)) {
-  BLECommandCenter = require('bleno');
-  RemoteService = require('./gatt_services/remote-service');
-  remoteService = new RemoteService();
-  
-  BLECommandCenter.on('stateChange', (state) => {
-    switch (state) {
-      case 'poweredOn':{
-        BLECommandCenter.startAdvertising('ServeAce',[remoteService.uuid]);
-        remoteService.initSubprocesses();
-        break;
-      }
-      case 'unauthorized': {
-        log.warn('Current user not authorized');
-        break;
-      }
-      case 'unsupported': {
-        log.warn('Device does not support BLE');
-        break;
-      }
-      default: {
-        BLECommandCenter.stopAdvertising();
-      }
+BLECommandCenter        = require('bleno');
+RemoteService           = require('./gatt_services/remote-service');
+remoteService           = new RemoteService();
+
+BLECommandCenter.on('stateChange', (state) => {
+  switch (state) {
+    case 'poweredOn':{
+      BLECommandCenter.startAdvertising('ServeAce',[remoteService.uuid]);
+      remoteService.initSubprocesses();
+      break;
     }
-  });
-
-  BLECommandCenter.on('advertisingStart', (error) => {
-    log.info('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
-
-    if( !error ) {
-      BLECommandCenter.setServices([remoteService], function(error) {
-        log.info('setServices: ' + (error ? 'error ' + error : 'success'));
-      });
+    case 'unauthorized': {
+      log.warn('Current user not authorized');
+      break;
     }
-  });
-
-  BLECommandCenter.on('accept', (clientAddress) => {
-    log.info(`Connected client address: ${clientAddress}`);
-  });
-
-  BLECommandCenter.on('disconnect', (clientAddress) => {
-    log.info(`Client disconnected: ${clientAddress}`);
-  });
-} else {
-  // TODO: Use ad-hoc wifi
-  const server = require('./server/server.js')();
-  mCtrl_process = fork('./sub_processes/dc_motors_ctrl.js');
-  sCtrl_process = fork('./sub_processes/carousel_stepper_ctrl.js');
-  sCtrl_process = fork('./sub_processes/horiz_stepper_ctrl.js');
-  const COMM_TAGS = require('./common/constants').COMM_TAGS;
-
-  server.on('dataReceived', function(data) {
-    log.info('data received:',data);
-    switch(data.tag) {
-      case COMM_TAGS.DEV_POWER: {
-        mCtrl_process.send({ tag:'POWER', val: data.val });
-        sCtrl_process.send({ tag:'POWER', val: data.val });
-        hCtrl_process.send({ tag:'POWER', val: data.val });
-        break;
-      }
-
-      case COMM_TAGS.DEV_PLAY_PAUSE: {
-        sCtrl_process.send({ tag:'STATE', val: data.val });
-        break;
-      }
-
-      case COMM_TAGS.SYNC_SERVE_PROFILE: {
-        break;
-      }
-
-      default: {
-        log.error("Unknown data tag");
-      }
+    case 'unsupported': {
+      log.warn('Device does not support BLE');
+      break;
     }
-  });
-}
+    default: {
+      BLECommandCenter.stopAdvertising();
+    }
+  }
+});
+
+BLECommandCenter.on('advertisingStart', (error) => {
+  log.info('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
+
+  if( !error ) {
+    BLECommandCenter.setServices([remoteService], (error) => {
+      log.info('setServices: ' + (error ? 'error ' + error : 'success'));
+    });
+  }
+});
+
+BLECommandCenter.on('accept', (clientAddress) => {
+  log.info(`Connected client address: ${clientAddress}`);
+});
+
+BLECommandCenter.on('disconnect', (clientAddress) => {
+  log.info(`Client disconnected: ${clientAddress}`);
+});
 
 
 process.on('message', (msg) => {

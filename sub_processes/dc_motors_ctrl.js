@@ -1,7 +1,6 @@
 'use strict';
 
 const SerialPort            = require('serialport');
-const os                    = require('os');
 const Board                 = require('firmata');
 const Motor                 = require('../models/Motor');
 const CONST                 = require('../common/constants');
@@ -13,7 +12,7 @@ const SPEED_FEEDBACK        = 1;
 
 let currentProfile          = {};
 let motor                   = null;
-let board_port              = (os.platform() === 'win32')? 'COM4':'/dev/ttyACM0';
+let board_port              = '/dev/ttyACM0';
 
 let board                   = new Board(new SerialPort(board_port, {baudRate: 57600}),
   {reportVersionTimeout: 1000}, (err) => {
@@ -83,7 +82,7 @@ process.on('message', (msg) => {
         speed -= 5; // -2%
       }
 
-			if(speed > 250 || speed === 0 ) {
+			if(speed > 250 || speed <== 0 ) {
         log.info('Speed is at max or min');
         return;
       }
