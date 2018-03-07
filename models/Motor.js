@@ -1,5 +1,6 @@
 'use strict';
 
+const SPEED_CHANGE		  = 2;
 const CONST             = require('../common/constants');
 const SPEEDS            = CONST.MOTOR_SPEEDS;
 const SERVE_TYPE        = CONST.SERVE_TYPE;
@@ -134,7 +135,12 @@ let changeSpeed = function (speed, m) {
     for (var i = this["speed"+m]; i <= speed; i++) {
       this.arduino.analogWrite(this["pwm"+m],i);
       this["speed"+m] = i;
+
       TimeUtils.sleepMillis(1000/60);
+			process.send({
+				tag: SPEED_CHANGE,
+				val: { tag: 6, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
+			});
     }
   } else {
     log.info(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
@@ -143,7 +149,12 @@ let changeSpeed = function (speed, m) {
     for (var i = this["speed"+m]; i >= speed; i--) {
       this.arduino.analogWrite(this["pwm"+m],i);
       this["speed"+m] = i;
+
       TimeUtils.sleepMillis(1000/60);
+			process.send({
+				tag: SPEED_CHANGE,
+				val: { tag: 6, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
+			});
     }
   }
 };

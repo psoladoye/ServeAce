@@ -6,10 +6,6 @@ const fork = require('child_process').fork;
 const os = require('os');
 const log = require('./utils/logger')('MAIN');
 
-const PLATFORM = os.platform();
-const WIN32 = 'win32';
-const BLE = process.env.BLE || null;
-
 let mCtrl_process = null;
 let sCtrl_process = null;
 

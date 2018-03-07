@@ -52,6 +52,7 @@ process.on('message', (msg) => {
       log.info(`Motor power state ${msg.val}`);
       if(motor) {
         motor.power(msg.val);
+
       } else {
         log.error('Null motor ref');
       }
@@ -77,9 +78,9 @@ process.on('message', (msg) => {
 			log.info(`Speed: ${speed}`);
 
       if(params.direction > 0) {
-        speed += 2;
+        speed += 5; // 2%
       } else if(params.direction < 0) {
-        speed -= 2;
+        speed -= 5; // -2%
       }
 
 			if(speed > 250 || speed === 0 ) {
@@ -87,10 +88,6 @@ process.on('message', (msg) => {
         return;
       }
 
-      process.send({ 
-        tag: SPEED_FEEDBACK, 
-        val: { tag: 6, motorNum: params.motorNum, speed: parseInt((speed/255) * 100)}
-      });
       motor.setSpeed(speed, params.motorNum);
       break;
     }

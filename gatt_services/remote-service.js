@@ -6,6 +6,7 @@ const PrimaryService          = bleno.PrimaryService;
 const fork                    = require('child_process').fork;
 const log                     = require('../utils/logger')('REMOTE_SERVICE');
 
+const SPEED_CHANGE								= 2;
 const SPEED_FEEDBACK              = 1;
 const MOTOR_ANGLE                 = 1;
 const COMM_TAGS                   = require('../common/constants').COMM_TAGS;
@@ -91,6 +92,11 @@ RemoteService.prototype.initSubprocesses = function () {
         mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
         break;
       }
+
+			case SPEED_CHANGE: {
+				log.info('Speed change registered');
+				break;
+			}
 
       default: log.info('Unknown tag');
     }
