@@ -127,7 +127,7 @@ RemoteService.prototype.initSubprocesses = function () {
   hCtrl_process.on('message', msg => {
     log.info(msg);
     switch(parseInt(msg.tag)) {
-      case: MOTOR_ANGLE {
+      case MOTOR_ANGLE: {
         mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
         break;
       }

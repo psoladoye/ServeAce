@@ -9,8 +9,8 @@ function StepperMotor(settings) {
 }
 
 StepperMotor.prototype.init = function() {
-	this.dirPin 		= new Gpio(this.settings.dir, 'out');
-	this.stepPin 		= new Gpio(this.settings.step, 'out');
+	this.dirPin 		= new Gpio(this.settings.dirPin, 'out');
+	this.stepPin 		= new Gpio(this.settings.stepPin, 'out');
 };
 
 StepperMotor.prototype.shutdown = function() {

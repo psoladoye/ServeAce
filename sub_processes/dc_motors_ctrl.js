@@ -89,7 +89,7 @@ process.on('message', (msg) => {
 
       process.send({ 
         tag: SPEED_FEEDBACK, 
-        val: { tag:, motorNum: params.motorNum, speed: parseInt((speed/255) * 100)}
+        val: { tag: 6, motorNum: params.motorNum, speed: parseInt((speed/255) * 100)}
       });
       motor.setSpeed(speed, params.motorNum);
       break;

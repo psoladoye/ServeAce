@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"ball",
+				"ballCount"
+			],
+			[
 				"mot",
 				"motorNum"
 			],
@@ -40,10 +44,6 @@
 				"setServe"
 			],
 			[
-				"ball",
-				"ballFeeder"
-			],
-			[
 				"bal",
 				"ballFeeder"
 			],
@@ -56,19 +56,28 @@
 	"buffers":
 	[
 		{
-			"file": "common/constants.js",
+			"file": "gatt_characteristics/motor-feedback-characteristics.js",
 			"settings":
 			{
-				"buffer_size": 982,
+				"buffer_size": 1193,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "gatt_services/remote-service.js",
 			"settings":
 			{
-				"buffer_size": 3492,
+				"buffer_size": 4199,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "models/BallFeeder.js",
+			"settings":
+			{
+				"buffer_size": 1441,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -77,15 +86,8 @@
 			"file": "sub_processes/dc_motors_ctrl.js",
 			"settings":
 			{
-				"buffer_size": 2579,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "gatt_characteristics/command-center-characteristic.js",
-			"settings":
-			{
-				"buffer_size": 737,
+				"buffer_size": 3090,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -93,7 +95,16 @@
 			"file": "models/Motor.js",
 			"settings":
 			{
-				"buffer_size": 3175,
+				"buffer_size": 4130,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sub_processes/carousel_stepper_ctrl.js",
+			"settings":
+			{
+				"buffer_size": 1583,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -138,27 +149,22 @@
 	},
 	"expanded_folders":
 	[
-		"/C/cygwin64/home/psola/Repositories/ServeAce",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/common",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_characteristics",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/models",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/utils"
+		"/C/cygwin64/home/psola/Repositories/ServeAce"
 	],
 	"file_history":
 	[
-		"/C/cygwin64/home/psola/Repositories/ServeAce/utils/time.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/C-CPP-Implementation/main.cpp",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/dc_motors_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/common/constants.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs/StepperLib.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/Motor.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/startup.sh",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/utils/time.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/carousel_stepper_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/horiz_stepper_ctrl.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/common/constants.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services/remote-service.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/BallFeeder.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs/AccelStepper.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/startup.sh",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/dc_motors_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/HStepper.js",
 		"/C/Users/psola/Downloads/AccelStepper-1.57.1/AccelStepper-1.57.1/src/AccelStepper.h",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/proc_management/pm2-app.json",
@@ -174,7 +180,7 @@
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 67.0
 	},
 	"find_in_files":
 	{
@@ -189,6 +195,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"');\n",
+			"BallCount",
 			"TimeUtils.sleep",
 			"    =",
 			"BallFeeder",
@@ -210,24 +218,173 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "common/constants.js",
+					"file": "gatt_characteristics/motor-feedback-characteristics.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 982,
+						"buffer_size": 1193,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								123,
-								141
+								968,
+								989
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "gatt_services/remote-service.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4199,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3527,
+								3527
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1800.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "models/BallFeeder.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1441,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1184,
+								1184
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "sub_processes/dc_motors_ctrl.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3090,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1474,
+								1522
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 300.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "models/Motor.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 4130,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3133,
+								3133
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1920.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "sub_processes/carousel_stepper_ctrl.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1583,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1556,
+								1556
 							]
 						],
 						"settings":
@@ -240,126 +397,6 @@
 						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "gatt_services/remote-service.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3492,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2034,
-								2049
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 720.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "sub_processes/dc_motors_ctrl.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2579,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1672,
-								1672
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "gatt_characteristics/command-center-characteristic.js",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 737,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "models/Motor.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3175,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2237,
-								2237
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 912.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 4,
 					"type": "text"
 				}
@@ -368,11 +405,11 @@
 	],
 	"incremental_find":
 	{
-		"height": 24.0
+		"height": 30.0
 	},
 	"input":
 	{
-		"height": 43.0
+		"height": 46.0
 	},
 	"layout":
 	{
@@ -405,7 +442,7 @@
 	"project": "serveace.sublime-project",
 	"replace":
 	{
-		"height": 44.0
+		"height": 55.0
 	},
 	"save_all_on_build": true,
 	"select_file":
