@@ -2,7 +2,7 @@
 
 const util = require('util');
 const bleno = require('bleno');
-const log = require('../utils/logger')('MOTOR_FEEDBACK');
+const log = require('../utils/logger')('MOTOR_FEEDBACK_CHAR');
 
 let Descriptor = bleno.Descriptor;
 let Characteristic = bleno.Characteristic;

@@ -22,7 +22,6 @@ function BallFeeder (options) {
  */
 BallFeeder.prototype.init = function () {
   log.info('Initializing ball feeder...');
-	this.stepperMotor.init();
 };
 
 BallFeeder.prototype.run = function () {

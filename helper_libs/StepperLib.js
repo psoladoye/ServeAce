@@ -1,14 +1,16 @@
 'use strict'
 
-const Gpio 					= require('onoff').Gpio;
+const Gpio 							= require('onoff').Gpio;
 const deg_per_step 			= 1.8;
-const TimeUtil				= require('../utils/time');
+const TimeUtil					= require('../utils/time');
 
 function StepperMotor(settings) {
 	this.settings = settings;
+	init.call(this);
 }
 
-StepperMotor.prototype.init = function() {
+let init = function() {
+	console.log(this.settings);
 	this.dirPin 		= new Gpio(this.settings.dirPin, 'out');
 	this.stepPin 		= new Gpio(this.settings.stepPin, 'out');
 };
