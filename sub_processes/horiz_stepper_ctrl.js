@@ -7,12 +7,13 @@ const TimeUtils     	= require('../utils/time');
 const INTL_TAGS       = require('../common/constants').INTL_TAGS;
 const COMM_TAGS     	= require('../common/constants').COMM_TAGS;
 const SERVE_LOCATION	= require('../common/constants').SERVE_LOC;
+const ASSIGNED_PINS   = require('../common/constants').ASSIGNED_PINS;
 
 let currentProfile    = {};
 
-let EN                = new Gpio(H_MOTOR_EN, 'out');
-let DIR               = new Gpio(H_MOTOR_DIR, 'out');
-let PULSE             = new Gpio(H_MOTOR_PULSE, 'out');
+let EN                = new Gpio(ASSIGNED_PINS.H_MOTOR_EN, 'out');
+let DIR               = new Gpio(ASSIGNED_PINS.H_MOTOR_DIR, 'out');
+let PULSE             = new Gpio(ASSIGNED_PINS.H_MOTOR_STEP, 'out');
 
 process.on('message', (msg) => {
 	log.info('Incoming message to rotator: => ');

@@ -8,6 +8,7 @@ const log                   = require('../utils/logger')('DC_MOTORS');
 const TimeUtils             = require('../utils/time');
 const POWER                 = CONST.DEV_STATES;
 const INTL_TAGS             = CONST.INTL_TAGS;
+const COMM_TAGS 						=	CONST.COMM_TAGS;
 
 let currentProfile          = {};
 let motor                   = null;
@@ -41,15 +42,6 @@ process.on('message', (msg) => {
   log.info('Incoming message => ', msg);
 
   switch(msg.tag) {
-		case 13: {
-			//motor.readAnalog();
-			break;
-		};
-
-		case 5: {
-			//motor.moveHoriz();
-			break;
-		}
 
     case INTL_TAGS.POWER: {
       log.info(`Motor power state ${msg.val}`);
@@ -100,11 +92,11 @@ process.on('message', (msg) => {
 
 function cleanUp() {
   log.info('Killing process by SIGINT');
-  if(motor) motor.power(POWER.OFF);	
+  if(motor) motor.power(POWER.OFF);
 
-  process.send({ 
+  process.send({
     tag: INTL_TAGS.NOTIFY_DC_MOTORS_INIT,
-    val: { tag: COMM_TAGS.DC_MOTORS_INITIALIZER, motorState: 0 } 
+    val: { tag: COMM_TAGS.DC_MOTORS_INITIALIZER, motorState: 0 }
   });
 
 	if(board) {

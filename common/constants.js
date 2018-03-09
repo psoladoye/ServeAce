@@ -67,7 +67,7 @@ const pins = {
   MOTOR_1_DIR: 4,
   MOTOR_2_PWM: 9,
   MOTOR_2_DIR: 8,
-  C_MOTOR_DIR: 5
+  C_MOTOR_DIR: 5,
   C_MOTOR_STEP: 6,
   H_MOTOR_EN: 18,
   H_MOTOR_DIR: 23,

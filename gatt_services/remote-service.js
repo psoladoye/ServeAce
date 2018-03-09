@@ -19,7 +19,7 @@ let mFeedackChar                  = new MotorFeedbackCharacteristic();
 
 let dc_motor_control_process                 = null;
 let carousel_control_process                 = null;
-let horizontal_control_orcc                 = null;
+let horizontal_control_process               = null;
 
 /**
  * {Gatt_Characteristic}
@@ -93,6 +93,7 @@ RemoteService.prototype.initSubprocesses = function () {
 
 			case INTL_TAGS.NOTIFY_DC_MOTORS_INIT: {
 				mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
+				break;
 			}
 
       default: log.info('Unknown tag');
