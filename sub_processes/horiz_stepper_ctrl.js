@@ -1,18 +1,18 @@
 'use strict';
 
+const Gpio            = require('onoff').Gpio;
 const log           	= require('../utils/logger')('H_STEPPER');
 const Stepper       	= require('../models/HStepper');
 const TimeUtils     	= require('../utils/time');
-const INTL_TAGS     	= require('../common/constants').INTL_TAGS;
+const INTL_TAGS       = require('../common/constants').INTL_TAGS;
+const COMM_TAGS     	= require('../common/constants').COMM_TAGS;
 const SERVE_LOCATION	= require('../common/constants').SERVE_LOC;
 
-let currentProfile  = {};
-//let horizStepper    = new Stepper();
+let currentProfile    = {};
 
-const Gpio = require('onoff').Gpio;
-let EN = new Gpio(18, 'out');
-let DIR = new Gpio(23, 'out');
-let PULSE = new Gpio(24, 'out');
+let EN                = new Gpio(H_MOTOR_EN, 'out');
+let DIR               = new Gpio(H_MOTOR_DIR, 'out');
+let PULSE             = new Gpio(H_MOTOR_PULSE, 'out');
 
 process.on('message', (msg) => {
 	log.info('Incoming message to rotator: => ');
@@ -22,15 +22,12 @@ process.on('message', (msg) => {
 			log.info('power');
 
       if(msg.val) {
-        //horizStepper.init();
+        log.info('Enable horiztontal rotator');
 				EN.writeSync(1);
-				//DIR.writeSync(1);
       } else {
         log.info('Stop horiz motor');
-        //horizStepper.stop();
 				EN.writeSync(0);
       }
-
       break;
     }
 
@@ -51,7 +48,7 @@ process.on('message', (msg) => {
         position = 90;
       }
 
-    	//horizStepper.move(position);
+    	// Move stepper into position
     	break;
     }
 
@@ -62,14 +59,17 @@ process.on('message', (msg) => {
 			DIR.writeSync(dir); 
 			log.info('PULSING.....')
 			for(let i = 0; i < 500; i++) {
-				//DIR.writeSync(1);
-				//EN.writeSync(1);
 				PULSE.writeSync(1);
 				TimeUtils.sleepMillis(0.1);
 				PULSE.writeSync(0);
 				TimeUtils.sleepMillis(0.1);
 			}
 			log.info('DONE PULSING');
+
+      process.send({
+        tag: INTL_TAGS.NOTIFY_HORIZ_ANGLE,
+        val: { tag: COMM_TAGS.HORIZ_MOTOR_ANGLE_FEEDBACK, angle: (dir === 1) ? 3.8 : -3.8}
+      });
 			break;
 		}
 
@@ -79,7 +79,7 @@ process.on('message', (msg) => {
 
 process.on('SIGINT', () => {
   log.info('SIGINT Shutting down horiztontal rotator');
-  //horizStepper.shutDown();
+  
 	if(PULSE) PULSE.unexport();
 	if(EN) EN.unexport();
 	if(DIR) DIR.unexport();

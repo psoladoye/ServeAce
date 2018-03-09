@@ -1,13 +1,11 @@
 'use strict';
 
-const util                    = require('util');
-const bleno                   = require('bleno');
-const PrimaryService          = bleno.PrimaryService;
-const fork                    = require('child_process').fork;
-const log                     = require('../utils/logger')('REMOTE_SERVICE');
+const util                        = require('util');
+const bleno                       = require('bleno');
+const PrimaryService              = bleno.PrimaryService;
+const fork                        = require('child_process').fork;
+const log                         = require('../utils/logger')('REMOTE_SERVICE');
 
-const SPEED_CHANGE								= 2;
-const MOTOR_ANGLE                 = 1;
 const COMM_TAGS                   = require('../common/constants').COMM_TAGS;
 const INTL_TAGS                   = require('../common/constants').INTL_TAGS;
 const DEV_STATES                  = require('../common/constants').DEV_STATES;
@@ -15,12 +13,13 @@ const BallCountCharacteristic     = require('../gatt_characteristics/ball-count-
 const CommandCenterCharacteristic = require('../gatt_characteristics/command-center-characteristic');
 const MotorFeedbackCharacteristic = require('../gatt_characteristics/motor-feedback-characteristic');
 
-let cCenterChar               = new CommandCenterCharacteristic();
-let bCountChar                = new BallCountCharacteristic();
-let mFeedackChar              = new MotorFeedbackCharacteristic();
-let mCtrl_process             = null;
-let cCtrl_process             = null;
-let hCtrl_process             = null;
+let cCenterChar                   = new CommandCenterCharacteristic();
+let bCountChar                    = new BallCountCharacteristic();
+let mFeedackChar                  = new MotorFeedbackCharacteristic();
+
+let dc_motor_control_process                 = null;
+let carousel_control_process                 = null;
+let horizontal_control_orcc                 = null;
 
 /**
  * {Gatt_Characteristic}
@@ -32,36 +31,33 @@ cCenterChar.on('dataReceived', function(data) {
   log.info('Parsed Data: ', parsedData);
 
   switch(parseInt(parsedData.tag)) {
-    case COMM_TAGS.DEV_POWER: { // Initializes all motors
-      mCtrl_process.send({ tag:INTL_TAGS.POWER, val: parsedData.val });
-      cCtrl_process.send({ tag:INTL_TAGS.POWER, val: parsedData.val });
-      hCtrl_process.send({ tag:INTL_TAGS.POWER, val: parsedData.val });
+    case COMM_TAGS.POWER: { // Initializes all motors
+      dc_motor_control_process.send({ tag:INTL_TAGS.POWER, val: parsedData.val });
+      carousel_control_process.send({ tag:INTL_TAGS.POWER, val: parsedData.val });
+      horizontal_control_process.send({ tag:INTL_TAGS.POWER, val: parsedData.val });
       break;
     }
 
-    case COMM_TAGS.DEV_PLAY_PAUSE: {
-      cCtrl_process.send({ tag:INTL_TAGS.STATE, val: parsedData.val });
-			mCtrl_process.send({ tag:13 });
+    case COMM_TAGS.PLAY_PAUSE: {
+      carousel_control_process.send({ tag:INTL_TAGS.STATE, val: parsedData.val });
       break;
     }
 
     case COMM_TAGS.SYNC_SERVE_PROFILE: {
-      mCtrl_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
-      cCtrl_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
-      hCtrl_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
+      dc_motor_control_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
+      carousel_control_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
+      horizontal_control_process.send({ tag:INTL_TAGS.PROFILE, val: parsedData.val });
       break;
     }
 
     case COMM_TAGS.CHANGE_MOTOR_SPEED: {
-      mCtrl_process.send({ tag:INTL_TAGS.SET_MOTOR_SPEED, params: parsedData.val });
+      dc_motor_control_process.send({ tag:INTL_TAGS.SET_MOTOR_SPEED, params: parsedData.val });
       break;
     }
 
     case COMM_TAGS.ROTATE_HORIZ_MOTOR: {
 			log.info('Horizontal rotation: ', INTL_TAGS.SET_HORIZ_MOTOR_DIR);
-      hCtrl_process.send({ tag:INTL_TAGS.SET_HORIZ_MOTOR_DIR, val: parsedData.val });
-			// Temp
-			//mCtrl_process.send({ tag:INTL_TAGS.SET_HORIZ_MOTOR_DIR });
+      horizontal_control_process.send({ tag:INTL_TAGS.SET_HORIZ_MOTOR_DIR, val: parsedData.val });
       break;
     }
 
@@ -85,17 +81,17 @@ RemoteService.prototype.initSubprocesses = function () {
   /**
    * {Subprocess} Handles firing-motor commands
    */
-  mCtrl_process = fork('./sub_processes/dc_motors_ctrl.js');
+  dc_motor_control_process = fork('./sub_processes/dc_motors_ctrl.js');
 
-	mCtrl_process.on('message', (msg) => {
+	dc_motor_control_process.on('message', (msg) => {
 		log.info(msg);
     switch(parseInt(msg.tag)) {
-      case SPEED_CHANGE: {
+      case INTL_TAGS.NOTIFY_MOTOR_SPEED_CHANGE: {
         mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
         break;
       }
 
-			case 6: {
+			case INTL_TAGS.NOTIFY_DC_MOTORS_INIT: {
 				mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
 			}
 
@@ -103,7 +99,7 @@ RemoteService.prototype.initSubprocesses = function () {
     }
 	});
 
-	mCtrl_process.on('error', (err) => {
+	dc_motor_control_process.on('error', (err) => {
 		log.error(err);
 	});
 
@@ -111,10 +107,10 @@ RemoteService.prototype.initSubprocesses = function () {
   /**
    * {Subprocess} Handles carousel stepper-motor commands
    */
-  cCtrl_process = fork('./sub_processes/carousel_stepper_ctrl.js');
-	cCtrl_process.on('message', (msg) => {
+  carousel_control_process = fork('./sub_processes/carousel_stepper_ctrl.js');
+	carousel_control_process.on('message', (msg) => {
 		switch(msg.tag) {
-			case 'BALL_COUNT': {
+			case INTL_TAGS.NOTIFY_BALL_COUNT: {
 				bCountChar.onBallCountChange(JSON.stringify(msg.val));
 				break;
 			}
@@ -122,19 +118,18 @@ RemoteService.prototype.initSubprocesses = function () {
 			default: log.info('Uknown tag');
 		}
 	});
-	cCtrl_process.on('error', (err) => {
+	carousel_control_process.on('error', (err) => {
 		log.error(err);
 	});
 
   /**
    * {Subprocess} Handles horizontal-rotator commands
    */
-  hCtrl_process = fork('./sub_processes/horiz_stepper_ctrl.js');
-
-  hCtrl_process.on('message', msg => {
+  horizontal_control_process = fork('./sub_processes/horiz_stepper_ctrl.js');
+  horizontal_control_process.on('message', msg => {
     log.info(msg);
     switch(parseInt(msg.tag)) {
-      case MOTOR_ANGLE: {
+      case INTL_TAGS.NOTIFY_HORIZ_ANGLE: {
         mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
         break;
       }
@@ -143,7 +138,7 @@ RemoteService.prototype.initSubprocesses = function () {
     }
   });
 
-	hCtrl_process.on('error', (err) => {
+	horizontal_control_process.on('error', (err) => {
 		log.error(err);
 	});
 };

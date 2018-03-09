@@ -1,16 +1,13 @@
 'use strict';
 
-const SPEED_CHANGE		  = 2;
 const CONST             = require('../common/constants');
 const SPEEDS            = CONST.MOTOR_SPEEDS;
 const SERVE_TYPE        = CONST.SERVE_TYPE;
 const POWER             = CONST.DEV_STATES;
+const INTL_TAGS         = CONST.INTL_TAGS;
+const COMM_TAGS         = CONST.COMM_TAGS;
 const TimeUtils         = require('../utils/time');
 const log               = require('../utils/logger')('MOTOR_MODEL');
-
-/*let EN = 13;
-let DIR = 12;
-let PULSE = 11;*/
 
 function Motor(options, board) {
   this.pwm1             = options.pwm1;
@@ -36,47 +33,12 @@ Motor.prototype.init = function () {
 
 	this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
 	this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
-	this.arduino.pinMode(5, this.arduino.MODES.ANALOG);
 
-	// Temp
-	//this.arduino.pinMode(EN, this.arduino.MODES.OUTPUT);
-	//this.arduino.pinMode(DIR, this.arduino.MODES.OUTPUT);
-	//this.arduino.pinMode(PULSE, this.arduino.MODES.OUTPUT);
-	//this.arduino.digitalWrite(DIR, this.arduino.HIGH);
-	//this.arduino.digitalWrite(EN, this.arduino.HIGH);
-
-	process.send({ tag: CONST.INTL_TAGS.DC_MOTORS_INIT,
-						val: { tag: CONST.INTL_TAGS.DC_MOTORS_INITIALIZED, val: true} } );
+	process.send({ 
+    tag: INTL_TAGS.NOTIFY_DC_MOTORS_INIT,
+		val: { tag: COMM_TAGS.DC_MOTORS_INITIALIZER, motorState: 1 } 
+  });
 };
-
-Motor.prototype.playStepper = function() {
-	log.info('Start pulsing....');
-	for( var i = 0; i < 1000; i++) {
-		this.arduino.digitalWrite(PULSE, this.arduino.HIGH);
-		TimeUtils.sleepMillis(0.1);
-		this.arduino.digitalWrite(PULSE, this.arduino.LOW);
-		TimeUtils.sleepMillis(0.1);
-	}
-	log.info('Stop pulsing.');
-};
-
-/*Motor.prototype.moveHoriz = function() {
-	var i = 0;
-	for(i = 0; i < 200; i++ ) {
-
-		this.arduino.digitalWrite(PULSE, this.arduino.HIGH);
-		TimeUtils.sleepMillis(1);
-		this.arduino.digitalWrite(PULSE, this.arduino.LOW);
-		TimeUtils.sleepMillis(1);
-	}
-
-}*/
-
-Motor.prototype.readAnalog = function() {
-	this.arduino.analogRead(5, (val) => {
-		log.info((val/1023) * 5);
-	});
-}
 
 Motor.prototype.power = function (state) {
   switch (state) {
@@ -177,8 +139,8 @@ let changeSpeed = function (speed, m) {
     }
 
 		process.send({
-			tag: SPEED_CHANGE,
-			val: { tag: CONST.INTL_TAGS.MOTOR_SPEED_FEEDBACK, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
+			tag: INTL_TAGS.NOTIFY_MOTOR_SPEED_CHANGE,
+			val: { tag: COMM_TAGS.DC_MOTOR_SPEED_FEEDBACK, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
 		});
   } else {
     log.info(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
@@ -192,8 +154,8 @@ let changeSpeed = function (speed, m) {
     }
 
 		process.send({
-			tag: SPEED_CHANGE,
-			val: { tag: CONST.INTL_TAGS.MOTOR_SPEED_FEEDBACK, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
+			tag: INTL_TAGS.NOTIFY_MOTOR_SPEED_CHANGE,
+			val: { tag: COMM_TAGS.DC_MOTOR_SPEED_FEEDBACK, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
 		});
   }
 };
