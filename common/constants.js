@@ -5,7 +5,9 @@ const comm_tags = {
   DEV_PLAY_PAUSE:2,
   SYNC_SERVE_PROFILE:3,
   CHANGE_MOTOR_SPEED: 4,
-  ROTATE_HORIZ_MOTOR: 5
+  ROTATE_HORIZ_MOTOR: 5,
+	MOTOR_SPEED_FEEDBACK: 6,
+	DC_MOTORS_INITIALIZED: 7
 };
 
 const dev_states = {
@@ -62,7 +64,8 @@ const internal_tags = {
   STATE: 2,
   PROFILE: 3,
   SET_MOTOR_SPEED: 4,
-  SET_HORIZ_MOTOR_DIR: 5
+  SET_HORIZ_MOTOR_DIR: 5,
+	DC_MOTORS_INIT: 6
 };
 
 module.exports = {

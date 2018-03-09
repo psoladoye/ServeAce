@@ -7,18 +7,28 @@ const INTL_TAGS     	= require('../common/constants').INTL_TAGS;
 const SERVE_LOCATION	= require('../common/constants').SERVE_LOC;
 
 let currentProfile  = {};
-let horizStepper    = new Stepper();
+//let horizStepper    = new Stepper();
 
-process.on('message', function(msg) {
-  switch(msg.tag) {
+const Gpio = require('onoff').Gpio;
+let EN = new Gpio(18, 'out');
+let DIR = new Gpio(23, 'out');
+let PULSE = new Gpio(24, 'out');
+
+process.on('message', (msg) => {
+	log.info('Incoming message to rotator: => ');
+	log.info(msg);
+  switch(parseInt(msg.tag)) {
     case INTL_TAGS.POWER: {
 			log.info('power');
 
       if(msg.val) {
-        horizStepper.init();
+        //horizStepper.init();
+				EN.writeSync(1);
+				//DIR.writeSync(1);
       } else {
         log.info('Stop horiz motor');
-        horizStepper.stop();
+        //horizStepper.stop();
+				EN.writeSync(0);
       }
 
       break;
@@ -41,9 +51,27 @@ process.on('message', function(msg) {
         position = 90;
       }
 
-    	horizStepper.move(position);
+    	//horizStepper.move(position);
     	break;
     }
+
+		case INTL_TAGS.SET_HORIZ_MOTOR_DIR: {
+			log.info(msg);
+			let dir = (parseInt(msg.val) < 0 ? 0 : 1 );
+			log.info(dir);
+			DIR.writeSync(dir); 
+			log.info('PULSING.....')
+			for(let i = 0; i < 500; i++) {
+				//DIR.writeSync(1);
+				//EN.writeSync(1);
+				PULSE.writeSync(1);
+				TimeUtils.sleepMillis(0.1);
+				PULSE.writeSync(0);
+				TimeUtils.sleepMillis(0.1);
+			}
+			log.info('DONE PULSING');
+			break;
+		}
 
     default: log.error(': Unknown tag');
   }
@@ -51,8 +79,12 @@ process.on('message', function(msg) {
 
 process.on('SIGINT', () => {
   log.info('SIGINT Shutting down horiztontal rotator');
-  horizStepper.shutDown();
-  TimeUtils.sleepMillis(500);
+  //horizStepper.shutDown();
+	if(PULSE) PULSE.unexport();
+	if(EN) EN.unexport();
+	if(DIR) DIR.unexport();
+
+  TimeUtils.sleepMillis(200);
   process.exit();
 });
 

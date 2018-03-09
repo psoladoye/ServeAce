@@ -7,7 +7,6 @@ const fork                    = require('child_process').fork;
 const log                     = require('../utils/logger')('REMOTE_SERVICE');
 
 const SPEED_CHANGE								= 2;
-const SPEED_FEEDBACK              = 1;
 const MOTOR_ANGLE                 = 1;
 const COMM_TAGS                   = require('../common/constants').COMM_TAGS;
 const INTL_TAGS                   = require('../common/constants').INTL_TAGS;
@@ -59,7 +58,10 @@ cCenterChar.on('dataReceived', function(data) {
     }
 
     case COMM_TAGS.ROTATE_HORIZ_MOTOR: {
+			log.info('Horizontal rotation: ', INTL_TAGS.SET_HORIZ_MOTOR_DIR);
       hCtrl_process.send({ tag:INTL_TAGS.SET_HORIZ_MOTOR_DIR, val: parsedData.val });
+			// Temp
+			//mCtrl_process.send({ tag:INTL_TAGS.SET_HORIZ_MOTOR_DIR });
       break;
     }
 
@@ -88,14 +90,13 @@ RemoteService.prototype.initSubprocesses = function () {
 	mCtrl_process.on('message', (msg) => {
 		log.info(msg);
     switch(parseInt(msg.tag)) {
-      case SPEED_FEEDBACK: {
+      case SPEED_CHANGE: {
         mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
         break;
       }
 
-			case SPEED_CHANGE: {
-				log.info('Speed change registered');
-				break;
+			case 6: {
+				mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
 			}
 
       default: log.info('Unknown tag');

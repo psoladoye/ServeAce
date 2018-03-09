@@ -42,16 +42,20 @@ process.on('message', (msg) => {
   log.info('Incoming message => ', msg);
 
   switch(msg.tag) {
-		/*case 13: {
-			motor.readAnalog();
+		case 13: {
+			//motor.readAnalog();
 			break;
-		};*/
+		};
+
+		case 5: {
+			//motor.moveHoriz();
+			break;
+		}
 
     case INTL_TAGS.POWER: {
       log.info(`Motor power state ${msg.val}`);
       if(motor) {
         motor.power(msg.val);
-
       } else {
         log.error('Null motor ref');
       }
@@ -82,7 +86,7 @@ process.on('message', (msg) => {
         speed -= 5; // -2%
       }
 
-			if(speed > 250 || speed <== 0 ) {
+			if(speed > 250 || speed <= 0 ) {
         log.info('Speed is at max or min');
         return;
       }
