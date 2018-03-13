@@ -43,8 +43,6 @@ Motor.prototype.init = function () {
 Motor.prototype.power = function (state) {
   switch (state) {
     case POWER.ON: {
-      this.arduino.digitalWrite(this.dir1, this.arduino.HIGH);
-      this.arduino.digitalWrite(this.dir2, this.arduino.HIGH);
 
       this.motorsRunning = true;
       this.setServe(this.currentServeType);
@@ -52,14 +50,8 @@ Motor.prototype.power = function (state) {
       break;
     }
     case POWER.OFF: {
-      this.arduino.digitalWrite(this.dir1, this.arduino.LOW);
-      this.arduino.digitalWrite(this.dir2, this.arduino.LOW);
 
-      TimeUtils.sleepMillis(100);
-
-      changeSpeed.call(this,0,1);
-      changeSpeed.call(this,0,2);
-
+      changeSpeed2.call(this,0,0);
       this.motorsRunning = false;
 
       break;
@@ -67,6 +59,11 @@ Motor.prototype.power = function (state) {
     default:log('Unknow device state');
   }
 };
+
+Motor.prototype.deInit = function() {
+  this.arduino.digitalWrite(this.dir1, this.arduino.LOW);
+  this.arduino.digitalWrite(this.dir2, this.arduino.LOW);
+}
 
 Motor.prototype.setServe = function (serve) {
   this.currentServeType = serve;
@@ -76,43 +73,37 @@ Motor.prototype.setServe = function (serve) {
   switch (this.currentServeType) {
     case SERVE_TYPE.FLAT_B: {
 			log.info('Serve type: Beginner flat serve');
-      changeSpeed.call(this, 179, 1);
-      changeSpeed.call(this, 179 ,2);
+      changeSpeed2.call(this, 179, 179);
       break;
     }
 
 		case SERVE_TYPE.FLAT_I: {
 			log.info('Serve type: Intermediate flat serve');
-			changeSpeed.call(this, 204, 1);
-			changeSpeed.call(this, 204, 2);
+			changeSpeed2.call(this, 204, 204);
 			break;
 		}
 
 		case SERVE_TYPE.FLAT_A: {
 			log.info('Serve type: Advanced flat serve');
-			changeSpeed.call(this, 222, 1);
-			changeSpeed.call(this, 222, 2);
+			changeSpeed2.call(this, 222, 222);
 			break;
 		}
 
     case SERVE_TYPE.TOPSPIN_B: {
 			log.info('Serve type: Beginner topsin');
-      changeSpeed.call(this, 166, 1);
-      changeSpeed.call(this, 191, 2);
+      changeSpeed2.call(this, 166, 191);
       break;
     }
 
 		case SERVE_TYPE.TOPSPIN_I: {
 			log.info('Serve type: Intermediate topspin');
-			changeSpeed.call(this, 204, 1);
-			changeSpeed.call(this, 230, 2);
+			changeSpeed2.call(this, 204, 230);
 			break;
 		}
 
 		case SERVE_TYPE.TOPSPIN_A: {
 			log.info('Serve type: Advanced topspin');
-			changeSpeed.call(this, 186, 1);
-			changeSpeed.call(this, 222, 2);
+			changeSpeed2.call(this, 186, 222);
 			break;
 		}
 
@@ -125,37 +116,93 @@ Motor.prototype.setSpeed = function(speed, motorNum) {
 	changeSpeed.call(this, speed, motorNum);
 };
 
+/**
+ * [changeMotorSpeed2 description]
+ * @param  {[type]} speed1 [description]
+ * @param  {[type]} speed2 [description]
+ * @return {[type]}        [description]
+ */
+let changeMotorSpeed2 = function( speed1, speed2 ) {
+  let maxSteps = Math.max( Math.abs(speed1 - this.speed1), Math.abs(speed2 - this.speed2) );
+  let step = 0.1;
+
+  if(this.speed1 === speed1 && this.speed2 === speed2) return;
+
+  for(let i = 0; i < maxSteps; i = i + step) {
+    if(this.speed1 !== speed1) {
+
+      if(this.speed1 < speed1) {
+        this.speed1 += step; // Speed up motor
+      } else {
+        this.speed1 -= step;
+      }
+
+      this.arduino.analogWrite(this.pwm1, this.speed1);
+      TimeUtils.sleepMillis(0.5);
+
+      if(this.speed2 !== speed2) {
+        if(this.speed2 < speed2) {
+          this.speed2 += step; // Speed up motor
+        } else {
+          this.speed2 -= step;
+        }
+
+        this.arduino.analogWrite(this.pwm2, this.speed2);
+        TimeUtils.sleepMillis(0.5);
+      }
+    }
+  }
+
+  process.send({
+    tag: INTL_TAGS.NOTIFY_MOTOR_SPEED_CHANGE,
+    val: { 
+      tag: COMM_TAGS.DC_MOTOR_SPEED_FEEDBACK2, 
+      topMotor: parseInt((this.speed2/255) * 100), 
+      bottomMotor: parseInt((this.speed1/255) * 100) 
+    }
+  });
+}
+
 let changeSpeed = function (speed, m) {
   if(this["speed"+m] === speed) return;
+
   if(this["speed"+m] < speed) {
-    log.info(`[Motor::speedUp]: Speeding up motor${m} to speed: ${speed}`);
     log.info('[Motor::speedUp]: current speed: ',this["speed"+m]);
+    log.info(`[Motor::speedUp]: Speeding up motor${m} to speed: ${speed}`);    
 
     for (var i = this["speed"+m]; i <= speed; i++) {
       this.arduino.analogWrite(this["pwm"+m],i);
       this["speed"+m] = i;
 
-      TimeUtils.sleepMillis(1000/60);
+      TimeUtils.sleepMillis(1);
     }
 
 		process.send({
 			tag: INTL_TAGS.NOTIFY_MOTOR_SPEED_CHANGE,
-			val: { tag: COMM_TAGS.DC_MOTOR_SPEED_FEEDBACK, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
+			val: { 
+        tag: COMM_TAGS.DC_MOTOR_SPEED_FEEDBACK, 
+        motorNum: m, 
+        speed: parseInt((this["speed"+m]/255) * 100) 
+      }
 		});
   } else {
-    log.info(`[Motor]: Slowing down motor${m} to speed: ${speed}`);
     log.info('[Motor::slowDown]: current speed: ',this["speed"+m]);
+    log.info(`[Motor]: Slowing down motor${m} to speed: ${speed}`);    
 
     for (var i = this["speed"+m]; i >= speed; i--) {
       this.arduino.analogWrite(this["pwm"+m],i);
       this["speed"+m] = i;
 
-      TimeUtils.sleepMillis(1000/60);
+      TimeUtils.sleepMillis(1);
     }
 
 		process.send({
 			tag: INTL_TAGS.NOTIFY_MOTOR_SPEED_CHANGE,
-			val: { tag: COMM_TAGS.DC_MOTOR_SPEED_FEEDBACK, motorNum: m, speed: parseInt((this["speed"+m]/255) * 100) }
+			val: { 
+        tag: COMM_TAGS.DC_MOTOR_SPEED_FEEDBACK, 
+        motorNum: m, 
+        speed: parseInt((this["speed"+m]/255) * 100) 
+      }
 		});
   }
 };

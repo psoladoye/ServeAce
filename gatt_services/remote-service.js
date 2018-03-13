@@ -15,7 +15,7 @@ const MotorFeedbackCharacteristic = require('../gatt_characteristics/motor-feedb
 
 let cCenterChar                   = new CommandCenterCharacteristic();
 let bCountChar                    = new BallCountCharacteristic();
-let mFeedackChar                  = new MotorFeedbackCharacteristic();
+let mFeedbackChar                 = new MotorFeedbackCharacteristic();
 
 let dc_motor_control_process                 = null;
 let carousel_control_process                 = null;
@@ -71,7 +71,7 @@ function RemoteService() {
     characteristics: [
       cCenterChar,
       bCountChar,
-      mFeedackChar
+      mFeedbackChar
     ]
   });
 }
@@ -87,12 +87,12 @@ RemoteService.prototype.initSubprocesses = function () {
 		log.info(msg);
     switch(parseInt(msg.tag)) {
       case INTL_TAGS.NOTIFY_MOTOR_SPEED_CHANGE: {
-        mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
+        mFeedbackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
         break;
       }
 
 			case INTL_TAGS.NOTIFY_DC_MOTORS_INIT: {
-				mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
+				mFeedbackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
 				break;
 			}
 
@@ -131,7 +131,7 @@ RemoteService.prototype.initSubprocesses = function () {
     log.info(msg);
     switch(parseInt(msg.tag)) {
       case INTL_TAGS.NOTIFY_HORIZ_ANGLE: {
-        mFeedackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
+        mFeedbackChar.onMotorFeedbackChange(JSON.stringify(msg.val));
         break;
       }
 
@@ -142,6 +142,17 @@ RemoteService.prototype.initSubprocesses = function () {
 	horizontal_control_process.on('error', (err) => {
 		log.error(err);
 	});
+};
+
+/**
+ * [deInit description]
+ * @return {[type]} [description]
+ */
+RemoteService.prototype.deInit = function () {
+  mFeedbackChar.onMotorFeedbackChange(JSON.stringify({
+    tag: COMM_TAGS.DC_MOTORS_INITIALIZER,
+    motorState: 0
+  }));
 };
 
 util.inherits(RemoteService, PrimaryService);

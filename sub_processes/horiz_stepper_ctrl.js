@@ -59,11 +59,11 @@ process.on('message', (msg) => {
 			log.info(dir);
 			DIR.writeSync(dir); 
 			log.info('PULSING.....')
-			for(let i = 0; i < 500; i++) {
+			for(let i = 0; i < 300; i++) {
 				PULSE.writeSync(1);
-				TimeUtils.sleepMillis(0.1);
+				TimeUtils.sleepMillis(2);
 				PULSE.writeSync(0);
-				TimeUtils.sleepMillis(0.1);
+				TimeUtils.sleepMillis(2);
 			}
 			log.info('DONE PULSING');
 

@@ -50,7 +50,7 @@ process.on('message', function(msg) {
           process.send({
             tag: INTL_TAGS.NOTIFY_BALL_COUNT, 
             val: {
-              tag: COMM_TAGS.BALL_COUNT,
+              tag: COMM_TAGS.BALL_COUNT_FEEDBACK,
               numOfBalls: currentProfile.ballCount
             } 
           });
@@ -65,6 +65,7 @@ process.on('message', function(msg) {
 
     case INTL_TAGS.PROFILE: {
 			log.info('profile', currentProfile);
+      log.info('msg', msg);
       currentProfile = msg.val;
       break;
     }
@@ -79,6 +80,6 @@ process.on('SIGINT', () => {
   if(intervalID) clearInterval(intervalID);
 	if(DIR) DIR.unexport();
 	if(STEP) STEP.unexport();
-  TimeUtils.sleepMillis(200);
+  TimeUtils.sleepMillis(50);
   process.exit();
 });

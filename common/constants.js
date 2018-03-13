@@ -9,7 +9,8 @@ const comm_tags = {
 	DC_MOTOR_SPEED_FEEDBACK: 6,
 	DC_MOTORS_INITIALIZER: 7,
   BALL_COUNT_FEEDBACK: 8,
-  HORIZ_MOTOR_ANGLE_FEEDBACK: 9
+  HORIZ_MOTOR_ANGLE_FEEDBACK: 9,
+  DC_MOTOR_SPEED_FEEDBACK2: 10
 };
 
 const internal_tags = {
@@ -71,7 +72,8 @@ const pins = {
   C_MOTOR_STEP: 6,
   H_MOTOR_EN: 18,
   H_MOTOR_DIR: 23,
-  H_MOTOR_STEP: 24
+  H_MOTOR_STEP: 24,
+  DEV_STATE_LED: 4
 };
 
 module.exports = {

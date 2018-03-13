@@ -73,6 +73,7 @@ process.on('message', (msg) => {
 
 function cleanUp() {
   log.info('cleaning up');
+  remoteService.deInit();
 }
 
 process.on('SIGINT', () => {

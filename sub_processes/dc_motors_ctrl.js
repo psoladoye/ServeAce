@@ -6,13 +6,16 @@ const Motor                 = require('../models/Motor');
 const CONST                 = require('../common/constants');
 const log                   = require('../utils/logger')('DC_MOTORS');
 const TimeUtils             = require('../utils/time');
+const Gpio                  = require('onoff').Gpio;
 const POWER                 = CONST.DEV_STATES;
 const INTL_TAGS             = CONST.INTL_TAGS;
 const COMM_TAGS 						=	CONST.COMM_TAGS;
+const ASSIGNED_PINS         = CONST.ASSIGNED_PINS;
 
 let currentProfile          = {};
 let motor                   = null;
 let board_port              = '/dev/ttyACM0';
+let devStateLed             = new Gpio('out', ASSIGNED_PINS.DEV_STATE_LED);
 
 let board                   = new Board(new SerialPort(board_port, {baudRate: 57600}),
   {reportVersionTimeout: 1000}, (err) => {
@@ -21,10 +24,10 @@ let board                   = new Board(new SerialPort(board_port, {baudRate: 57
   } else {
     log.info('Arduino ready');
     motor = new Motor({
-      pwm1: CONST.ASSIGNED_PINS.MOTOR_1_PWM,
-      dir1: CONST.ASSIGNED_PINS.MOTOR_1_DIR,
-      pwm2: CONST.ASSIGNED_PINS.MOTOR_2_PWM,
-      dir2: CONST.ASSIGNED_PINS.MOTOR_2_DIR
+      pwm1: ASSIGNED_PINS.MOTOR_1_PWM,
+      dir1: ASSIGNED_PINS.MOTOR_1_DIR,
+      pwm2: ASSIGNED_PINS.MOTOR_2_PWM,
+      dir2: ASSIGNED_PINS.MOTOR_2_DIR
     }, board);
     motor.init();
   }
@@ -72,9 +75,9 @@ process.on('message', (msg) => {
 			log.info(`Speed: ${speed}`);
 
       if(params.direction > 0) {
-        speed += 5; // 2%
+        speed += 5.1; // 2%
       } else if(params.direction < 0) {
-        speed -= 5; // -2%
+        speed -= 5.1; // -2%
       }
 
 			if(speed > 250 || speed <= 0 ) {
@@ -92,23 +95,21 @@ process.on('message', (msg) => {
 
 function cleanUp() {
   log.info('Killing process by SIGINT');
-  if(motor) motor.power(POWER.OFF);
+  if(motor) {
+    motor.power(POWER.OFF);
+    motor.deInit();
+  }
 
-  process.send({
-    tag: INTL_TAGS.NOTIFY_DC_MOTORS_INIT,
-    val: { tag: COMM_TAGS.DC_MOTORS_INITIALIZER, motorState: 0 }
-  });
+	if(board && board.transport.isOpen) {
+		TimeUtils.sleepMillis(300);
+    board.transport.flush((err) => {
+      log.error(err);
+    });
 
-	if(board) {
-		TimeUtils.sleepMillis(100);
-		board.transport.flush((err) => {
-			log.error(err);
-		});
-
-		TimeUtils.sleepMillis(100);
-		board.transport.close((err) => {
-			log.error(err);
-		});
+    TimeUtils.sleepMillis(50);
+    board.transport.close((err) => {
+      log.error(err);
+    });
 	}
 }
 

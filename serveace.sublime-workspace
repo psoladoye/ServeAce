@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"in",
+				"intervalID"
+			],
+			[
+				"CO",
+				"COMM_TAGS"
+			],
+			[
 				"ball",
 				"ballCount"
 			],
@@ -56,10 +64,27 @@
 	"buffers":
 	[
 		{
+			"file": "gatt_services/remote-service.js",
+			"settings":
+			{
+				"buffer_size": 4612,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "models/Motor.js",
+			"settings":
+			{
+				"buffer_size": 4559,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "common/constants.js",
 			"settings":
 			{
-				"buffer_size": 1039,
+				"buffer_size": 1273,
 				"line_ending": "Unix"
 			}
 		}
@@ -105,23 +130,26 @@
 	"expanded_folders":
 	[
 		"/C/cygwin64/home/psola/Repositories/ServeAce",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/common"
+		"/C/cygwin64/home/psola/Repositories/ServeAce/common",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/models",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes"
 	],
 	"file_history":
 	[
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/carousel_stepper_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/dc_motors_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/common/constants.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/horiz_stepper_ctrl.js",
+		"/C/cygwin64/home/psola/Repositories/ServeAce/models/Motor.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/startup.sh",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/main.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs/StepperLib.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/carousel_stepper_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/BallFeeder.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_services/remote-service.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/gatt_characteristics/motor-feedback-characteristic.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/C-CPP-Implementation/main.cpp",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/common/constants.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/models/Motor.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/utils/time.js",
-		"/C/cygwin64/home/psola/Repositories/ServeAce/sub_processes/horiz_stepper_ctrl.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/helper_libs/AccelStepper.js",
 		"/C/cygwin64/home/psola/Repositories/ServeAce/models/HStepper.js",
 		"/C/Users/psola/Downloads/AccelStepper-1.57.1/AccelStepper-1.57.1/src/AccelStepper.h",
@@ -137,7 +165,7 @@
 	],
 	"find":
 	{
-		"height": 30.0
+		"height": 52.0
 	},
 	"find_in_files":
 	{
@@ -152,6 +180,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"hCtrl_process",
+			"cCtrl_process",
+			"mCtrl_process",
 			"os",
 			"');\n",
 			"BallCount",
@@ -181,19 +212,19 @@
 			[
 				{
 					"buffer": 0,
-					"file": "common/constants.js",
-					"semi_transient": true,
+					"file": "gatt_services/remote-service.js",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1039,
+						"buffer_size": 4612,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								830,
-								811
+								3437,
+								3437
 							]
 						],
 						"settings":
@@ -203,10 +234,76 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 590.0,
+						"translation.y": 1560.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 1,
+					"file": "models/Motor.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4559,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1359,
+								1359
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 540.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "common/constants.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1273,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 829.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -229,11 +326,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.5,
 			1.0
 		],
 		"rows":
