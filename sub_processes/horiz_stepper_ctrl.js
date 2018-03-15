@@ -9,7 +9,7 @@ const COMM_TAGS     	= require('../common/constants').COMM_TAGS;
 const SERVE_LOCATION	= require('../common/constants').SERVE_LOC;
 const ASSIGNED_PINS   = require('../common/constants').ASSIGNED_PINS;
 
-let currentProfile    = {};
+let currentProfile    = { serveLocation: 0 };
 
 let EN                = new Gpio(ASSIGNED_PINS.H_MOTOR_EN, 'out');
 let DIR               = new Gpio(ASSIGNED_PINS.H_MOTOR_DIR, 'out');
@@ -33,44 +33,45 @@ process.on('message', (msg) => {
     }
 
     case INTL_TAGS.PROFILE: {
-			log.info('profile');
+			log.info('profile', currentProfile);
 
     	if(currentProfile.serveLocation === msg.val.serveLocation)
     		return;
 
-    	currentProfile = msg.val;
-      let position = 0;
+			if(EN.readSync()) {
+				let dir = currentProfile.serveLocation - msg.val.serveLocation;
+				let loop = Math.abs(dir);
 
-      if(currentProfile.serveLocation === SERVE_LOCATION.LEFT) {
-        position = -90;
-      } else if(currentProfile.serveLocation === SERVE_LOCATION.CENTER) {
-        position = 0;
-      } else if(currentProfile.serveLocation === SERVE_LOCATION.RIGHT) {
-        position = 90;
-      }
+				for(let i  = 0; i < loop; i++) {
+					moveStepper(dir,msg.val.serveLocation);
+				}
+				currentProfile = msg.val;
+			}
 
-    	// Move stepper into position
     	break;
     }
 
 		case INTL_TAGS.SET_HORIZ_MOTOR_DIR: {
 			log.info(msg);
-			let dir = (parseInt(msg.val) < 0 ? 0 : 1 );
-			log.info(dir);
-			DIR.writeSync(dir); 
-			log.info('PULSING.....')
-			for(let i = 0; i < 300; i++) {
-				PULSE.writeSync(1);
-				TimeUtils.sleepMillis(2);
-				PULSE.writeSync(0);
-				TimeUtils.sleepMillis(2);
-			}
-			log.info('DONE PULSING');
+			moveStepper(msg.val.dir, msg.val.serveLocation);
+			currentProfile.serveLocation = msg.val.serveLocation;
+			break;
+		}
 
-      process.send({
-        tag: INTL_TAGS.NOTIFY_HORIZ_ANGLE,
-        val: { tag: COMM_TAGS.HORIZ_MOTOR_ANGLE_FEEDBACK, angle: (dir === 1) ? 3.8 : -3.8}
-      });
+		case INTL_TAGS.SET_SERVE_LOCATION: {
+			log.info('Set serve locaiton');
+			if(currentProfile.serveLocation === msg.serveLocation)
+    		return;
+
+			if(EN.readSync()) {
+				let dir = currentProfile.serveLocation - msg.serveLocation;
+				let loop = Math.abs(dir);
+
+				for(let i  = 0; i < loop; i++) {
+					moveStepper(dir,msg.serveLocation);
+				}
+				currentProfile.serveLocation = msg.serveLocation;
+			}
 			break;
 		}
 
@@ -78,14 +79,43 @@ process.on('message', (msg) => {
   }
 });
 
+function moveStepper(dir, serveLocation) {
+	let dirCalc = (dir < 0 ? 0 : 1 );
+	log.info(dir);
+	DIR.writeSync(dir);
+	log.info('PULSING.....')
+	for(let i = 0; i < 300; i++) {
+		PULSE.writeSync(1);
+		TimeUtils.sleepMillis(2);
+		PULSE.writeSync(0);
+		TimeUtils.sleepMillis(2);
+	}
+	log.info('DONE PULSING');
+
+	let angle = 0;
+
+	if(serveLocation === -1) {
+		angle = -3.8;
+	} else if(serveLocation === 0) {
+		angle = 0;
+	} else if(serveLocation === 1) {
+		angle = 3.8;
+	}
+
+  process.send({
+  	tag: INTL_TAGS.NOTIFY_HORIZ_ANGLE,
+    val: { tag: COMM_TAGS.HORIZ_MOTOR_ANGLE_FEEDBACK, angle: angle}
+  });
+}
+
 process.on('SIGINT', () => {
   log.info('SIGINT Shutting down horiztontal rotator');
-  
+
 	if(PULSE) PULSE.unexport();
 	if(EN) EN.unexport();
 	if(DIR) DIR.unexport();
 
-  TimeUtils.sleepMillis(200);
+  TimeUtils.sleepMillis(1500);
   process.exit();
 });
 

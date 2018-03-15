@@ -4,6 +4,7 @@ const path              = require('path');
 const fs                = require('fs');
 const fork              = require('child_process').fork;
 const log               = require('./utils/logger')('MAIN');
+const TimeUtils 				= require('./utils/time');
 
 let mCtrl_process       = null;
 let sCtrl_process       = null;
@@ -78,5 +79,6 @@ function cleanUp() {
 
 process.on('SIGINT', () => {
   cleanUp();
+	TimeUtils.sleepMillis(5000);
   process.exit();
 });

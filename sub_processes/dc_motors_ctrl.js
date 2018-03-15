@@ -15,7 +15,7 @@ const ASSIGNED_PINS         = CONST.ASSIGNED_PINS;
 let currentProfile          = {};
 let motor                   = null;
 let board_port              = '/dev/ttyACM0';
-let devStateLed             = new Gpio('out', ASSIGNED_PINS.DEV_STATE_LED);
+let devStateLed             = new Gpio(ASSIGNED_PINS.DEV_STATE_LED, 'out');
 
 let board                   = new Board(new SerialPort(board_port, {baudRate: 57600}),
   {reportVersionTimeout: 1000}, (err) => {
@@ -30,6 +30,7 @@ let board                   = new Board(new SerialPort(board_port, {baudRate: 57
       dir2: ASSIGNED_PINS.MOTOR_2_DIR
     }, board);
     motor.init();
+		devStateLed.writeSync(1);
   }
 });
 
@@ -42,7 +43,6 @@ board.on('error', (err) => {
 });*/
 
 process.on('message', (msg) => {
-  log.info('Incoming message => ', msg);
 
   switch(msg.tag) {
 
@@ -57,7 +57,7 @@ process.on('message', (msg) => {
     }
 
     case INTL_TAGS.PROFILE: {
-      log.info(`Profile command ${msg.val}`);
+      log.info('Profile command', msg.val);
 			if(!motor) return;
 
       currentProfile = msg.val;
@@ -89,15 +89,32 @@ process.on('message', (msg) => {
       break;
     }
 
+		case INTL_TAGS.SET_PLAYER_LEVEL: {
+			log.info('Setting player level...');
+			if(currentProfile && currentProfile.playerLevel === msg.playerLevel) return;
+
+			currentProfile.playerLevel = msg.playerLevel;
+			motor.setServe(currentProfile.serveType * currentProfile.playerLevel);
+			break;
+		}
+
     default: log.error('Unknown option.');
   }
 });
 
 function cleanUp() {
   log.info('Killing process by SIGINT');
+
+	if(devStateLed) {
+		devStateLed.writeSync(0);
+		devStateLed.unexport();
+	}
+
   if(motor) {
     motor.power(POWER.OFF);
+		TimeUtils.sleepMillis(50);
     motor.deInit();
+		TimeUtils.sleepMillis(50);
   }
 
 	if(board && board.transport.isOpen) {
@@ -115,6 +132,6 @@ function cleanUp() {
 
 process.on('SIGINT', () => {
   cleanUp();
-  TimeUtils.sleepMillis(100);
+  TimeUtils.sleepMillis(1500);
   process.exit();
 });

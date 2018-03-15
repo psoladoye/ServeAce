@@ -61,6 +61,18 @@ cCenterChar.on('dataReceived', function(data) {
       break;
     }
 
+		case COMM_TAGS.PLAYER_LEVEL: {
+			log.info('player level update');
+			dc_motor_control_process.send({ tag: INTL_TAGS.SET_PLAYER_LEVEL, playerLevel: parsedData.playerLevel})
+			break;
+		}
+
+		case COMM_TAGS.SERVE_LOCATION: {
+			log.info('Serve location update');
+			horizontal_control_process.send({ tag: INTL_TAGS.SET_SERVE_LOCATION, serveLocation: parsedData.serveLocation });
+			break;
+		}
+
     default: log.error('Unknown data');
   }
 });

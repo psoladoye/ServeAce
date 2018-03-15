@@ -80,6 +80,6 @@ process.on('SIGINT', () => {
   if(intervalID) clearInterval(intervalID);
 	if(DIR) DIR.unexport();
 	if(STEP) STEP.unexport();
-  TimeUtils.sleepMillis(50);
+  TimeUtils.sleepMillis(1500);
   process.exit();
 });
